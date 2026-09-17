@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>春高バレーの優勝監督になろう！</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="titleScreen" class="title-screen">
+    <img class="title-screen-bg" src="assets/title_screen.png" alt="春高バレーの優勝監督になろう！">
+    <div class="title-buttons">
+      <button id="titleStartBtn" class="title-start-btn" type="button">はじめから</button>
+      <button id="titleLoadBtn" class="title-start-btn title-load-btn" type="button">セーブから始める</button>
+    </div>
+  </div>
+  <div class="app-shell">
+    <!-- v182: ロゴ／年月／学校の格／大会タイムライン／タブ／次週に進む を1本の帯にまとめた（Tak指示）。
+         従来は .topbar（108px）＋ #statusBar（60px）＋ .tabs（42px）の3段で、上部に258px使っていた。 -->
+    <header class="topbar" id="topbar">
+      <img class="topbar-logo" src="assets/title_logo_extracted.png" alt="春高バレーの優勝監督になろう！">
+      <!-- v184: 月をいちばん大きく出す（Tak指示）。年目と週は添える程度にする -->
+      <div class="topbar-season"><span class="topbar-year"><b id="sbYear">1</b>年目</span><span class="topbar-month" id="sbMonth">4月</span><span class="topbar-week" id="sbWeek">第1週</span></div>
+      <span class="topbar-class" id="sbClass">新設校</span>
+      <div class="topbar-timeline" id="sbTimeline"></div>
+      <nav class="topbar-tabs">
+        <button class="tab-btn active" data-tab="dashboard">チーム</button>
+        <button class="tab-btn" data-tab="players">選手</button>
+        <button class="tab-btn" data-tab="match">試合</button>
+        <button class="tab-btn" data-tab="coach">監督</button>
+        <button class="tab-btn" data-tab="scout">スカウト</button>
+        <button class="tab-btn" data-tab="hall">殿堂</button>
+      </nav>
+      <span class="topbar-chips" id="sbChips"></span>
+      <button id="advanceMonthBtn" class="primary global-advance-btn" type="button">次週に進む</button>
+    </header>
+
+    <main>
+      <section class="tab-panel active" id="dashboard">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-title-row">
+              <h2>スタメン<span id="helpStarters"></span></h2>
+              <button id="startRotationRotateBtn" class="mini-tag rotation-header-btn" type="button" title="試合開始ローテーションを時計回りに回す">試合開始ローテーション ↻</button>
+            </div>
+            <div id="starterGrid" class="starter-grid"></div>
+          </div>
+          <div class="card">
+            <h2>チーム概要<span id="helpTeamRadar"></span></h2>
+            <div id="teamSummary" class="summary-stack"></div>
+            <!-- v172: スタメンプリセットはチーム概要の下に縦型で置く（Tak指示） -->
+            <div id="lineupPresetPanel" class="top-gap"></div>
+            <div class="action-row top-gap save-action-row">
+              <!-- v181: セーブはファイル書き出しに一本化。スロット管理は廃止（Tak指示 ⑥） -->
+              <button id="manualSaveBtn" class="primary" type="button">セーブ</button>
+              <button id="loadImportBtn" class="ghost" type="button">ロード</button>
+              <button id="resetBtn" class="ghost">初期状態に戻す</button>
+            </div>
+            <div id="monthlyReportPanel" class="top-gap"></div>
+          </div>
+        </div>
+        
+          <div class="card">
+            <h2>スカウト<span id="helpScoutRegion"></span></h2>
+            <div id="scoutedList" class="scouted-list muted">まだスカウト済み選手はいません。</div>
+          </div>
+
+      </section>
+
+      <section class="tab-panel" id="players">
+        <div class="grid players-layout">
+          <div class="card">
+            <h2>選手一覧</h2>
+            <div id="rosterList" class="roster-list"></div>
+          </div>
+          <div class="card detail-card">
+            <div id="playerDetail"></div>
+          </div>
+        </div>
+      </section>
+<section class="tab-panel" id="match">
+        <div class="grid two-col">
+          <div class="card">
+            <h2>大会試合<span id="helpTactics"></span></h2>
+            <div id="tournamentStatus" class="match-stage-banner top-gap muted">通常期間</div>
+            <div class="matchup-box top-gap">
+              <div class="team-pill own" id="ownTeamName">若葉高校</div>
+              <div class="vs">VS</div>
+              <div class="team-pill opp" id="currentOppName">東峰女学院</div>
+            </div>
+            <div class="action-row top-gap">
+              <button id="simulateMatchBtn" class="primary">結果を見る</button>
+              <button id="startWatchMatchBtn" class="secondary">1点ずつ見る</button>
+              <button id="nextPointBtn" class="ghost" disabled>次へ</button>
+            </div>
+            <div id="matchTacticsPanel" class="substitution-panel top-gap"></div>
+            <div id="substitutionPanel" class="substitution-panel top-gap"></div>
+            <div id="preMatchLineups" class="top-gap"></div>
+            <div id="matchResultSummary" class="match-summary top-gap muted">未実施</div>
+          </div>
+          <div class="card">
+            <h2>試合ログ</h2>
+            <!-- v181: 戦力レーダーはローテーション表示からここへ移した。試合が始まるとログに置き換わる。 -->
+            <div id="matchRadarPanel" class="hidden"></div>
+            <div id="matchLog" class="log-panel tall"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="coach">
+        <div class="grid two-col">
+          <div class="card">
+            <div class="card-title-row">
+              <h2>監督コマンド<span id="helpCoachAction"></span></h2>
+              <span id="coachActionBadge" class="mini-tag">未決定</span>
+            </div>
+            <p class="hint">第1週目はこの画面で監督の行動を決めてから「次週に進む」を押します。第2週目以降は通常練習で進行します。</p>
+            <div class="coach-action-grid">
+              <button class="coach-action-btn coach-action-card" data-coach-action="scout" type="button"><span>🗺️</span><strong>スカウト</strong><small>新入生候補</small></button>
+              <button class="coach-action-btn coach-action-card" data-coach-action="individual" type="button"><span>🏐</span><strong>個別練習</strong><small>一点強化</small></button>
+              <button class="coach-action-btn coach-action-card" data-coach-action="recreation" type="button"><span>🍱</span><strong>レクリエーション</strong><small>調子改善</small></button>
+              <button class="coach-action-btn coach-action-card" data-coach-action="pro_watch" type="button"><span>🎥</span><strong>プロ観戦</strong><small>特殊能力</small></button>
+              <button class="coach-action-btn coach-action-card" data-coach-action="director" type="button"><span>🤝</span><strong>監督活動</strong><small>外部活動</small></button>
+            </div>
+            <div id="coachActionSummary" class="coach-action-summary top-gap">今月の第1週目に行う監督行動を選んでください。</div>
+
+            <div id="coachScoutSettings" class="coach-inline-settings top-gap">
+              <div class="field-group">
+                <label class="field-label" for="scoutRegionSelect">スカウト地域</label>
+                <select id="scoutRegionSelect">
+                  <option>北海道東北</option><option>関東</option><option>北陸</option><option>東海</option><option>近畿</option><option>中国</option><option>四国</option><option>九州</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="scoutPositionSelect">探すポジション</label>
+                <select id="scoutPositionSelect">
+                  <option>OH</option><option>MB</option><option>OP</option><option>S</option><option>L</option>
+                </select>
+              </div>
+              <div class="scout-rumor-panel coach-rumor-panel">
+                <div class="scout-rumor-title">現在のスカウトの噂</div>
+                <div id="coachScoutRumorList" class="scout-rumor-list muted">現在、スカウトの噂はありません。</div>
+              </div>
+            </div>
+          </div>
+          <div class="card individual-training-card">
+            <div class="card-title-row">
+              <h2>監督ステータス</h2>
+              <span class="mini-tag">監督行動で伸びます</span>
+            </div>
+            <div id="coachStatusPanel" class="top-gap"></div>
+            <!-- v104: 個別練習の対象選択はこのカードから廃止。設定は行動選択のモーダルから行う。
+                 要素はイベントのバインド先として残す必要があるため、非表示で保持する。 -->
+            <div class="individual-training-controls compact hidden">
+              <button id="openIndividualTrainingModalBtn" class="primary" type="button">対象選手と練習を選ぶ</button>
+              <div id="individualTrainingCurrent" class="coach-action-summary">未設定</div>
+              <select id="individualPlayerSelect" class="hidden"></select>
+              <select id="individualTrainingSelect" class="hidden"></select>
+            </div>
+            <div id="coachDirectorSettings" class="coach-inline-settings top-gap">
+              <div class="field-group">
+                <label class="field-label" for="directorVisitSelect">訪問場所</label>
+                <select id="directorVisitSelect"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="scout">
+        <div class="card">
+          <div class="card-title-row"><h2>スカウト済み選手</h2></div>
+          <p class="hint">細かい能力値は伏せています。表示は顔グラ、名前、身長、ポジション別適正値のみです。</p>
+          <div class="scout-rumor-panel">
+            <div class="scout-rumor-title">現在のスカウトの噂</div>
+            <div id="scoutRumorList" class="scout-rumor-list muted">現在、スカウトの噂はありません。</div>
+          </div>
+          <div id="scoutedTabList" class="scouted-tab-list muted">まだスカウト済み選手はいません。</div>
+</div>
+      </section>
+
+      <section class="tab-panel" id="hall">
+          <div class="card">
+            <div class="card-title-row"><h2>殿堂<span id="helpHall"></span></h2></div>
+            <h3 class="hall-heading">歴代OGドリームチーム</h3>
+            <div id="hallOgList" class="hall-grid"></div>
+            <h3 class="hall-heading top-gap">プロ入りした選手</h3>
+            <div id="hallProList" class="hall-pro-list"></div>
+          </div>
+        </section>
+
+      <!-- v183: 「メモ」タブは削除（Tak指示）。開発メモ・イベント省略モード・マネージャー顔グラ変更ごと無くした。 -->
+    </main>
+  </div>
+
+
+  <input id="saveImportInput" type="file" accept="application/json,.json" class="hidden" />
+  <!-- v181: セーブ管理モーダルは廃止（Tak指示 ⑥）。セーブ＝書き出し、ロード＝ファイル読み込み。 -->
+
+  <!-- v179: 試合画面の選手詳細。ローテーションのカードを押すと開く。 -->
+  <div id="matchPlayerModal" class="modal hidden"><div class="modal-backdrop" onclick="closeMatchPlayerModal()"></div><div class="modal-card match-player-card">
+    <div class="modal-head">
+      <h2>選手データ</h2>
+      <button id="closeMatchPlayerModalBtn" class="ghost small" type="button">閉じる</button>
+    </div>
+    <div id="matchPlayerModalBody" class="match-player-modal-body"></div>
+  </div></div>
+
+  <!-- v174: 体験版の終了画面。閉じるボタンは無く、この記録ではもう進めない。 -->
+  <div id="demoEndModal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card demo-end-card">
+    <img id="demoEndHero" class="demo-end-hero" alt="">
+    <div class="modal-head">
+      <h2>体験版クリア</h2>
+    </div>
+    <div id="demoEndBody" class="demo-end-body"></div>
+    <div class="demo-end-actions">
+      <button id="demoExportSaveBtn" class="primary" type="button">セーブを書き出す</button>
+      <button id="demoRestartBtn" class="ghost" type="button">新しく始める</button>
+    </div>
+  </div></div>
+
+  <div id="individualTrainingModal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card scout-map-card">
+    <div class="modal-head">
+      <h2>個別練習の対象選択</h2>
+      <button id="closeIndividualTrainingModalBtn" class="ghost small" type="button">閉じる</button>
+    </div>
+    <div class="individual-modal-layout card-pick-modal">
+      <select id="individualModalPlayerSelect" class="hidden"></select>
+      <select id="individualModalTrainingSelect" class="hidden"></select>
+      <h3>対象選手</h3>
+      <div id="individualModalPlayerGrid" class="player-pick-grid"></div>
+      <h3 class="top-gap">練習メニュー</h3>
+      <div id="individualModalTrainingGrid" class="training-pick-grid"></div>
+      <div id="individualModalPreview" class="coach-action-summary top-gap"></div>
+      <div class="action-row top-gap">
+        <button id="confirmIndividualTrainingModalBtn" class="primary" type="button">この設定にする</button>
+      </div>
+    </div>
+  </div></div>
+
+  <div id="growthModal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card important-popup-card"><div class="modal-title-row"><h2 id="growthModalTitle">お知らせ</h2></div><div id="growthModalContent" class="modal-content"></div><div class="modal-bottom-actions"><button id="growthModalClose" class="primary" type="button">閉じる</button></div></div></div>
+
+
+  <div id="introFlowModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card intro-flow-card">
+      <div id="introFlowContent" class="modal-content"></div>
+    </div>
+  </div>
+
+  <div id="managerDock" class="manager-dock">
+    <img id="managerPortrait" class="manager-portrait" src="assets/new_shino.png" alt="マネージャー">
+    <div class="manager-talk">
+      <!-- v185: 「マネージャー」の見出しは不要（Tak指示） -->
+      <div id="managerMessage" class="manager-message">監督、今日もよろしくお願いします。</div>
+    </div>
+  </div>
+
+
+  <div id="monthlyActionModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card monthly-action-card">
+      <div class="manager-choice-head">
+        <img class="manager-choice-portrait" src="assets/new_shino.png" alt="マネージャー">
+        <div>
+          <div class="manager-name">マネージャー</div>
+          <h2>今月の行動を選んでください</h2>
+          <p id="monthlyActionMessage">今月の行動を選んでください。</p>
+        </div>
+      </div>
+      <div class="choice-buttons monthly-choice-grid">
+        <button id="chooseDirectorBtn" class="monthly-choice-card" data-coach-action="director" type="button"><span class="choice-illust">🤝</span><strong>監督活動</strong><small>外部との関係づくり。練習器具・留学先・練習試合などにつながる</small><span class="choice-lock"></span></button>
+        <button id="chooseScoutBtn" class="monthly-choice-card" data-coach-action="scout" type="button"><span class="choice-illust">🗺️</span><strong>スカウト</strong><small>来年度の入部候補を探す。地域ごとに伸びやすい能力が違う</small><span class="choice-lock"></span></button>
+        <button id="chooseIndividualBtn" class="monthly-choice-card" data-coach-action="individual" type="button"><span class="choice-illust">🏐</span><strong>個別練習</strong><small>1人を集中指導。チーム全体の通常練習も並行して行われる</small><span class="choice-lock"></span></button>
+        <button id="chooseRecreationBtn" class="monthly-choice-card" data-coach-action="recreation" type="button"><span class="choice-illust">🍱</span><strong>レクリエーション</strong><small>チームの調子を整える。不調の選手が多い月に</small><span class="choice-lock"></span></button>
+        <button id="chooseProWatchBtn" class="monthly-choice-card" data-coach-action="pro_watch" type="button"><span class="choice-illust">🎥</span><strong>プロの試合見学</strong><small>特殊能力のヒントを狙う。分析力が高いほど当たりやすい</small><span class="choice-lock"></span></button>
+      </div>
+      <p class="hint">第1週目に今月の行動を選びます。カードを押すとその行動で1週進みます。</p>
+        <div class="modal-bottom-actions"><button id="closeMonthlyActionModalBtn" class="ghost" type="button">閉じる</button></div>
+    </div>
+  </div>
+
+
+
+  <div id="directorVisitModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card monthly-action-card">
+      <div class="modal-title-row">
+        <h2>監督活動：訪問場所を選択</h2>
+        <button id="closeDirectorVisitBtn" class="ghost small" type="button">閉じる</button>
+      </div>
+      <p class="hint">訪問先は学校の格によって解禁されます。学校の格が下がると、訪問先も封鎖されます。</p>
+      <div class="field-group top-gap">
+        <label class="field-label" for="directorVisitModalSelect">訪問場所</label>
+        <select id="directorVisitModalSelect"></select>
+      </div>
+      <div id="directorVisitHelp" class="coach-action-summary top-gap">訪問先を選んでください。</div>
+      <div id="directorEventScene" class="director-event-scene hidden"></div>
+      <div id="directorChoiceArea" class="director-choice-area hidden"></div>
+      <div id="directorResultArea" class="director-result-area hidden"></div>
+      <div class="action-row top-gap" id="directorVisitActionRow">
+        <button id="confirmDirectorVisitBtn" class="primary" type="button">訪問する</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="scoutMapModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card scout-map-card">
+      <div class="modal-title-row">
+        <h2>スカウト先・ポジションを選択</h2>
+        <button id="closeScoutMapBtn" class="ghost small" type="button" >閉じる</button>
+      </div>
+      <div class="manager-choice-head compact">
+        <img class="manager-choice-portrait" src="assets/new_shino.png" alt="マネージャー">
+        <div id="scoutMapManagerComment" class="scout-manager-comment">地域を選んでください。</div>
+      </div>
+      <div class="scout-rumor-panel scout-map-rumor-panel">
+        <div class="scout-rumor-title">現在のスカウトの噂</div>
+        <div id="scoutMapRumorList" class="scout-rumor-list muted">現在、スカウトの噂はありません。</div>
+      </div>
+      <div id="scoutMapPreview" class="scout-map-preview"></div>
+      <div class="japan-map">
+        <button class="region-shape hokkaido" data-region="北海道東北">北海道東北</button>
+        <button class="region-shape kanto" data-region="関東">関東</button>
+        <button class="region-shape hokuriku" data-region="北陸">北陸</button>
+        <button class="region-shape tokai" data-region="東海">東海</button>
+        <button class="region-shape kinki" data-region="近畿">近畿</button>
+        <button class="region-shape chugoku" data-region="中国">中国</button>
+        <button class="region-shape shikoku" data-region="四国">四国</button>
+        <button class="region-shape kyushu" data-region="九州">九州</button>
+      </div>
+      <div class="scout-decision">
+        <label class="field-label" for="scoutMapPositionSelect">探すポジション</label>
+        <select id="scoutMapPositionSelect"><option>OH</option><option>MB</option><option>OP</option><option>S</option><option>L</option></select>
+        <button id="confirmScoutMapBtn" class="primary" type="button" >スカウトに行く</button>
+      </div>
+      <div id="scoutResultBox" class="scout-result-box muted hidden"></div>
+    </div>
+  </div>
+
+
+  <div id="scoutDetailModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card scout-detail-card">
+      <div class="modal-title-row">
+        <h2>スカウト選手 詳細</h2>
+        <button id="closeScoutDetailBtn" class="ghost small" type="button" >閉じる</button>
+      </div>
+      <div id="scoutDetailContent" class="modal-content"></div>
+    </div>
+  </div>
+
+
+  <div id="aprilRecruitModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card april-recruit-card">
+      <div class="modal-title-row">
+        <h2>新年度 入部選択</h2>
+      </div>
+      <p class="hint">年度が替わりました。入部を許可する選手のカードを押して「合格」にしてください。最大10人まで。誰も選ばずに進めることもできます。</p>
+      <div id="aprilRecruitList" class="april-recruit-list"></div>
+      <div class="action-row top-gap">
+        <button id="confirmAprilRecruitBtn" class="primary" type="button" >選択した選手を入部させる</button>
+      </div>
+      <div id="aprilRecruitWarning" class="hint top-gap"></div>
+    </div>
+  </div>
+
+  <div id="monthTransitionModal" class="modal hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card month-transition-card">
+        <!-- v172: 上に画像、下に各内容を横並びで置く（Tak指示） -->
+        <img id="monthTransitionImage" class="month-transition-hero hidden" src="" alt="">
+        <div class="modal-title-row">
+          <h2 id="monthTransitionTitle">月が替わりました</h2>
+        </div>
+        <p id="monthTransitionMessage" class="hint"></p>
+        <div class="month-transition-body">
+          <div class="month-transition-col">
+            <div id="monthTransitionNotice" class="hidden"></div>
+            <div class="month-transition-actions">
+              <button id="openMonthlyGrowthReportBtn" class="secondary" type="button"><span id="monthTransitionGrowthLabel">成長報告を確認</span></button>
+              <button id="openMonthlyCoachActionBtn" class="secondary" type="button">今月の行動を決める</button>
+            </div>
+            <div id="monthTransitionCoachSummary" class="month-transition-summary">今月の監督行動はまだ決まっていません。</div>
+          </div>
+          <div class="month-transition-col">
+            <div id="monthTransitionDevSquad"></div>
+          </div>
+        </div>
+        <div class="modal-bottom-actions">
+          <button id="closeMonthTransitionBtn" class="primary" type="button">この方針で進める</button>
+        </div>
+      </div>
+    </div>
+    <div id="monthGrowthReportModal" class="modal hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-card month-growth-card">
+        <div class="modal-title-row">
+          <h2 id="monthGrowthReportTitle">成長報告</h2>
+        </div>
+        <div id="monthGrowthReportContent" class="modal-content"></div>
+        <div class="modal-bottom-actions">
+          <button id="closeMonthGrowthReportBtn" class="primary" type="button">閉じる</button>
+        </div>
+      </div>
+    </div>
+    <div id="advanceConfirmModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card monthly-action-card">
+      <div class="modal-title-row">
+        <h2>監督行動の確認</h2>
+      </div>
+      <p class="hint">監督の行動が決定されていませんがこのまま進んで良いですか？このまま進む場合、個別練習を実行します。</p>
+      <div class="choice-buttons">
+        <button id="confirmAdvanceWithoutCoachBtn" class="primary" type="button">次週に進む</button>
+        <button id="backToCoachBtn" class="ghost" type="button">戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 体験版（Web公開用）：全国大会編のデータは含みません。誤って製品版の content-national.js を置いても読み込まれません。 -->
+  <script src="game.js"></script>
+</body>
+</html>

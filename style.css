@@ -1,0 +1,4565 @@
+:root {
+  --bg: #eef5ff;
+  --panel: #ffffff;
+  --line: #d5e5ff;
+  --primary: #3a7dff;
+  --primary-dark: #245ec8;
+  --text: #183153;
+  --muted: #5d7395;
+  --good: #16a34a;
+  --warn: #e67e22;
+  --bad: #dc2626;
+  --shadow: 0 10px 24px rgba(41, 84, 145, 0.12);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #f4f8ff 0%, #eaf3ff 100%);
+  /* v185: マネージャー枠の背後に敷く帯の色をスクロール位置によらず一定にする */
+  background-attachment: fixed;
+  color: var(--text);
+}
+.app-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.topbar h1 { margin: 0; font-size: 1.45rem; }
+.season-box {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: #f6faff;
+  border: 1px solid var(--line);
+  min-width: 180px;
+  text-align: right;
+  font-weight: 700;
+}
+.school-rank { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  border: none;
+  background: #dfeeff;
+  color: var(--primary-dark);
+  border-radius: 999px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.grid {
+  display: grid;
+  gap: 16px;
+}
+.two-col { grid-template-columns: 1.2fr 1fr; }
+.players-layout { grid-template-columns: 360px 1fr; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.card h2 { margin: 0 0 14px; font-size: 1.05rem; }
+.mini-tag {
+  background: #e8f1ff;
+  color: var(--primary-dark);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.starter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 12px;
+}
+.starter-card, .roster-item {
+  border: 1px solid var(--line);
+  background: #f7fbff;
+  border-radius: 18px;
+  padding: 10px;
+}
+.starter-card img.player-face, .roster-item img, .detail-head img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #eef4ff;
+}
+.starter-card .name, .roster-item .name { font-weight: 700; margin-top: 8px; }
+.starter-card .meta, .roster-item .meta { color: var(--muted); font-size: 0.84rem; }
+.summary-stack {
+  display: grid;
+  gap: 10px;
+}
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+button.primary, button.ghost {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+button.primary { background: var(--primary); color: #fff; }
+button.primary:hover { background: var(--primary-dark); }
+button.ghost { background: #eff5ff; color: var(--primary-dark); }
+.muted { color: var(--muted); }
+.top-gap { margin-top: 14px; }
+.roster-list {
+  display: grid;
+  gap: 10px;
+}
+.roster-item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+.roster-item.active { outline: 2px solid var(--primary); }
+.detail-head {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
+}
+.detail-head img { width: 150px; }
+.detail-name { font-size: 1.3rem; font-weight: 800; margin: 0; }
+.detail-meta { color: var(--muted); margin: 6px 0 10px; }
+.mood-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  background: #edf4ff;
+}
+.detail-section { margin-top: 18px; }
+.stat-grid, .component-grid, .position-grid {
+  display: grid;
+  gap: 10px;
+}
+.stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.component-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.position-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.stat-box, .component-box, .position-box {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 10px;
+  background: #fbfdff;
+}
+.stat-top, .component-top, .position-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+.bar {
+  height: 10px;
+  background: #e3ecf9;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6aa8ff, #2d76ff);
+}
+.subline { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+.field-label {
+  display: block;
+  margin: 10px 0 6px;
+  font-weight: 700;
+}
+select {
+  width: 100%;
+  border: 1px solid #c7d8f5;
+  border-radius: 14px;
+  padding: 11px 42px 11px 13px;
+  background:
+    linear-gradient(135deg, #ffffff, #f3f8ff),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20'%3E%3Cpath fill='%232d76ff' d='M5.5 7.5 10 12l4.5-4.5 1.2 1.2L10 14.4 4.3 8.7z'/%3E%3C/svg%3E") no-repeat right 13px center / 16px 16px;
+  color: var(--text);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(45,118,255,.08);
+  appearance: none;
+  -webkit-appearance: none;
+}
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(45,118,255,.16);
+}
+.hint { color: var(--muted); font-size: 0.88rem; }
+.log-panel {
+  height: 320px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  background: #f8fbff;
+}
+.log-panel.tall { height: 480px; }
+.log-entry {
+  padding: 8px 0;
+  border-bottom: 1px dashed #d7e7ff;
+  font-size: 0.92rem;
+}
+.log-entry:last-child { border-bottom: none; }
+.matchup-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #f7fbff;
+}
+.team-pill {
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+}
+.team-pill.own { background: #dceaff; color: var(--primary-dark); }
+.team-pill.opp { background: #ffe3e7; color: #b72e49; }
+.vs { font-weight: 900; color: var(--muted); }
+.match-summary {
+  min-height: 50px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f7fbff;
+  border: 1px dashed var(--line);
+}
+.notes-list { padding-left: 18px; margin: 0; }
+.notes-list li { margin-bottom: 8px; }
+@media (max-width: 900px) {
+  .two-col, .players-layout, .detail-head, .stat-grid, .component-grid { grid-template-columns: 1fr; }
+  /* v182: 上帯は1本の折り返し行にしたので、縦積みにはしない（旧 .topbar / .season-box 用のルールは撤去）。 */
+}
+
+
+.rank-s { color: #e11d48 !important; }
+.rank-a { color: #f97316 !important; }
+.rank-b { color: #65a30d !important; }
+.rank-c { color: #0284c7 !important; }
+.rank-d { color: #6366f1 !important; }
+.rank-e { color: #64748b !important; }
+.rank-f { color: #475569 !important; }
+
+.rank-chip {
+  display: inline-flex;
+  min-width: 30px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 7px;
+  margin-left: 4px;
+  font-size: 0.82em;
+  font-weight: 900;
+  background: #f1f5f9;
+  border: 1px solid #dbeafe;
+}
+.rank-chip.rank-s { background: #ffe4ea; border-color: #fecdd3; }
+.rank-chip.rank-a { background: #ffedd5; border-color: #fed7aa; }
+.rank-chip.rank-b { background: #ecfccb; border-color: #d9f99d; }
+.rank-chip.rank-c { background: #e0f2fe; border-color: #bae6fd; }
+.rank-chip.rank-d { background: #e0e7ff; border-color: #c7d2fe; }
+.rank-chip.rank-e, .rank-chip.rank-f { background: #f1f5f9; border-color: #cbd5e1; }
+
+.stat-bar.rank-s > span { background: linear-gradient(90deg, #fb7185, #e11d48); }
+.stat-bar.rank-a > span { background: linear-gradient(90deg, #fdba74, #f97316); }
+.stat-bar.rank-b > span { background: linear-gradient(90deg, #bef264, #65a30d); }
+.stat-bar.rank-c > span { background: linear-gradient(90deg, #7dd3fc, #0284c7); }
+.stat-bar.rank-d > span { background: linear-gradient(90deg, #a5b4fc, #6366f1); }
+.stat-bar.rank-e > span, .stat-bar.rank-f > span { background: linear-gradient(90deg, #cbd5e1, #64748b); }
+
+.component-line {
+  padding: 10px 0;
+  border-top: 1px dashed #d7e7ff;
+}
+.component-line:first-of-type { border-top: none; }
+.component-line-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+.xp-bar > span {
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+}
+.component-box .bar {
+  height: 9px;
+  margin-top: 7px;
+}
+
+/* v4: 一昔前のパワプロ風能力色 */
+.rank-s { color: #7c3aed !important; }
+.rank-a { color: #ff4fa3 !important; }
+.rank-b { color: #e60033 !important; }
+.rank-c { color: #d6a900 !important; }
+.rank-d { color: #f28c00 !important; }
+.rank-e { color: #00a651 !important; }
+.rank-f { color: #0070c0 !important; }
+.rank-g { color: #8a8a8a !important; }
+
+.rank-chip.rank-s { background: #ede9fe; border-color: #c4b5fd; color:#7c3aed !important; }
+.rank-chip.rank-a { background: #ffe4f2; border-color: #ff9ccd; color:#ff2f92 !important; }
+.rank-chip.rank-b { background: #ffe1e7; border-color: #ff9aae; color:#e60033 !important; }
+.rank-chip.rank-c { background: #fff5bf; border-color: #ffe45c; color:#967400 !important; }
+.rank-chip.rank-d { background: #ffedd5; border-color: #fdba74; color:#c05600 !important; }
+.rank-chip.rank-e { background: #dcfce7; border-color: #86efac; color:#008f45 !important; }
+.rank-chip.rank-f { background: #dbeafe; border-color: #93c5fd; color:#0068b7 !important; }
+.rank-chip.rank-g { background: #eeeeee; border-color: #cfcfcf; color:#666 !important; }
+
+.stat-bar.rank-s > span { background: linear-gradient(90deg, #a78bfa, #7c3aed); }
+.stat-bar.rank-a > span { background: linear-gradient(90deg, #ff9ccd, #ff4fa3); }
+.stat-bar.rank-b > span { background: linear-gradient(90deg, #ff738a, #e60033); }
+.stat-bar.rank-c > span { background: linear-gradient(90deg, #ffe45c, #f2c500); }
+.stat-bar.rank-d > span { background: linear-gradient(90deg, #fdba74, #f28c00); }
+.stat-bar.rank-e > span { background: linear-gradient(90deg, #86efac, #00a651); }
+.stat-bar.rank-f > span { background: linear-gradient(90deg, #93c5fd, #0070c0); }
+.stat-bar.rank-g > span { background: linear-gradient(90deg, #d4d4d4, #8a8a8a); }
+
+.simple-stat {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+}
+.simple-stat .stat-top {
+  width: 100%;
+  font-size: 1rem;
+}
+.simple-stat strong {
+  font-size: 1.15rem;
+}
+
+.own-name {
+  color: #1d4ed8;
+  font-weight: 900;
+}
+.opp-name {
+  color: #be123c;
+  font-weight: 900;
+}
+.calc-result {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  font-weight: 900;
+}
+.rally-head {
+  margin: 10px 0 4px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #e8f1ff;
+  color: #174ea6;
+  font-weight: 900;
+}
+.training-player-block {
+  border: 1px solid #d7e7ff;
+  border-radius: 14px;
+  padding: 8px 10px;
+  margin-top: 8px;
+  background: #fbfdff;
+}
+.training-player-name {
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.training-detail {
+  font-size: 0.86rem;
+  color: #314767;
+  padding: 2px 0;
+}
+.level-up {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 1px 7px;
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 900;
+}
+
+
+/* v5: 基本パラメータは4項目×2行に固定 */
+.stat-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.position-box.rank-s { background: #f3e8ff; border-color: #c4b5fd; }
+.position-box.rank-a { background: #ffe4f2; border-color: #ff9ccd; }
+.position-box.rank-b { background: #ffe1e7; border-color: #ff9aae; }
+.position-box.rank-c { background: #fff5bf; border-color: #ffe45c; }
+.position-box.rank-d { background: #ffedd5; border-color: #fdba74; }
+.position-box.rank-e { background: #dcfce7; border-color: #86efac; }
+.position-box.rank-f { background: #dbeafe; border-color: #93c5fd; }
+.position-box.rank-g { background: #eeeeee; border-color: #cfcfcf; }
+
+.position-box.rank-s strong { color: #7c3aed; }
+.position-box.rank-a strong { color: #ff4fa3; }
+.position-box.rank-b strong { color: #e60033; }
+.position-box.rank-c strong { color: #d6a900; }
+.position-box.rank-d strong { color: #f28c00; }
+.position-box.rank-e strong { color: #00a651; }
+.position-box.rank-f strong { color: #0070c0; }
+.position-box.rank-g strong { color: #8a8a8a; }
+
+@media (max-width: 900px) {
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* v6 */
+.detail-meta .rank-chip { margin-left: 6px; }
+/* v7 turn-based training and match icons */
+.mini-icon{width:22px;height:22px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:4px;border:1px solid rgba(255,255,255,.9)}
+.modal.hidden{display:none}.modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center}.modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.45)}.modal-card{position:relative;width:min(520px,calc(100vw - 28px));max-height:min(640px,calc(100vh - 28px));overflow:auto;background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:18px}.modal-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.modal-title-row h2{margin:0}button.small{padding:8px 10px}.growth-item{padding:10px 0;border-bottom:1px dashed #d7e7ff;font-weight:800}.growth-item:last-child{border-bottom:none}.training-player-block{border:1px solid #d7e7ff;border-radius:14px;padding:8px 10px;margin-top:8px;background:#fbfdff}.training-player-name{font-weight:900;margin-bottom:4px}.training-detail{font-size:.86rem;color:#314767;padding:2px 0}.level-up{display:inline-flex;border-radius:999px;padding:1px 7px;background:#dcfce7;color:#15803d;font-weight:900}.rally-head{margin:10px 0 4px;padding:8px 10px;border-radius:12px;background:#e8f1ff;color:#174ea6;font-weight:900}.calc-result{display:inline-flex;align-items:center;border-radius:999px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-weight:900}.own-name{color:#1d4ed8;font-weight:900}.opp-name{color:#be123c;font-weight:900}.detail-meta .rank-chip{margin-left:6px} select:disabled{background:#eef2f7;color:#94a3b8;}
+
+/* v9: 顔グラ重なり防止・特殊能力表示 */
+.starter-card,
+.roster-item,
+.detail-head {
+  overflow: hidden;
+}
+.starter-card img,
+.roster-item img {
+  display: block;
+  flex-shrink: 0;
+}
+.roster-item {
+  grid-template-columns: 64px minmax(0, 1fr) auto !important;
+}
+.roster-item img {
+  width: 64px !important;
+  height: 64px !important;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.roster-item .name,
+.roster-item .meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.starter-grid {
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)) !important;
+}
+.starter-card img.player-face {
+  height: auto;
+  max-height: 120px;
+  object-fit: cover;
+}
+.detail-head {
+  align-items: start;
+}
+.detail-head img {
+  width: 150px !important;
+  height: 150px !important;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.special-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.special-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+@media (max-width: 560px) {
+  .detail-head {
+    grid-template-columns: 110px 1fr !important;
+  }
+  .detail-head img {
+    width: 110px !important;
+    height: 110px !important;
+  }
+  .starter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* v10: 金特殊能力 */
+.gold-special-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #fff7cc, #facc15 45%, #b45309);
+  border: 1px solid #f59e0b;
+  color: #5f3500;
+  font-size: 0.82rem;
+  font-weight: 1000;
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.25);
+}
+
+/* v11: マネージャーUI */
+body { padding-bottom: var(--manager-dock-space, 118px); }
+
+/* v185: マネージャー枠の後ろに画面の情報を表示させず、その上をスクロールさせる（Tak指示） */
+.manager-dock::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--manager-dock-space, 118px);
+  background: #eaf3ff;
+  border-top: 1px solid #d7e6fb;
+  box-shadow: 0 -6px 14px rgba(15, 23, 42, 0.07);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.manager-dock {
+  position: fixed;
+  /* v185: transform で中央寄せすると ::before の position:fixed が
+     この枠を基準にしてしまい、背後を覆う帯が枠の幅までしか広がらない。
+     left/right + margin auto で中央に置く。 */
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  width: min(980px, calc(100vw - 20px));
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 8000; /* v91: モーダル(9000〜)より下に置く */
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 10px;
+  align-items: end;
+  pointer-events: none;
+}
+
+.manager-portrait {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+  background: #fff;
+}
+
+.manager-talk {
+  pointer-events: auto;
+  background: rgba(255,255,255,0.96);
+  border: 2px solid #bfdbfe;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.22);
+  padding: 10px 14px;
+  min-height: 74px;
+}
+
+.manager-name {
+  display: inline-flex;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 900;
+  font-size: 0.82rem;
+  margin-bottom: 4px;
+}
+
+.manager-message {
+  color: #172554;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.manager-log-entry {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.manager-log-entry.log-text-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.manager-log-bubble {
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  padding: 8px 10px;
+}
+
+.growth-manager {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 900;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 560px) {
+  body { padding-bottom: var(--manager-dock-space, 132px); }
+  .manager-dock::before { height: var(--manager-dock-space, 132px); }
+  .manager-dock { grid-template-columns: 60px 1fr; }
+  .manager-portrait { width: 60px; height: 60px; border-radius: 15px; }
+  .manager-talk { min-height: 82px; padding: 9px 11px; }
+  .manager-message { font-size: 0.92rem; }
+}
+
+/* v13: 月初方針選択・マネージャー顔グラ強化 */
+.manager-inline {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.manager-inline-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #bfdbfe;
+  background: #fff;
+}
+.monthly-action-card { max-width: 560px; }
+.manager-choice-head {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+.manager-choice-portrait {
+  width: 86px;
+  height: 86px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid #dbeafe;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+}
+.manager-choice-head h2 { margin: 6px 0 4px; }
+#monthlyActionMessage {
+  margin: 0;
+  color: #334155;
+  font-weight: 800;
+}
+.choice-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+.choice-buttons .secondary {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #c2410c;
+  font-weight: 900;
+}
+@media (max-width: 560px) {
+  .manager-choice-head { grid-template-columns: 64px minmax(0, 1fr); }
+  .manager-choice-portrait {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+  .choice-buttons { grid-template-columns: 1fr; }
+}
+
+/* v14: スカウト地図・スカウト一覧・表示調整 */
+.scouted-list {
+  display: grid;
+  gap: 8px;
+}
+.scouted-card {
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.rumor-tag {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.scout-map-card {
+  width: min(760px, calc(100vw - 24px));
+}
+
+.manager-choice-head.compact {
+  grid-template-columns: 62px minmax(0,1fr);
+  margin-bottom: 10px;
+}
+.manager-choice-head.compact .manager-choice-portrait {
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+}
+.scout-manager-comment {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #172554;
+  font-weight: 900;
+  border-radius: 14px;
+  padding: 10px;
+}
+
+.japan-map {
+  position: relative;
+  height: 430px;
+  background: linear-gradient(180deg, #ecfeff, #eff6ff);
+  border: 1px solid #bfdbfe;
+  border-radius: 22px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.region-shape {
+  position: absolute;
+  border: 2px solid #93c5fd;
+  background: rgba(219, 234, 254, 0.92);
+  color: #1e3a8a;
+  font-weight: 1000;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+.region-shape:hover,
+.region-shape.selected {
+  background: #facc15;
+  border-color: #f59e0b;
+  color: #78350f;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, .25);
+}
+.region-shape.hokkaido { top: 20px; right: 46px; width: 180px; height: 70px; }
+.region-shape.kanto { top: 145px; right: 150px; width: 115px; height: 82px; }
+.region-shape.hokuriku { top: 132px; right: 275px; width: 110px; height: 68px; }
+.region-shape.tokai { top: 230px; right: 150px; width: 110px; height: 68px; }
+.region-shape.kinki { top: 250px; right: 395px; width: 112px; height: 70px; }
+.region-shape.chugoku { top: 235px; left: 120px; width: 120px; height: 70px; }
+.region-shape.shikoku { top: 323px; left: 185px; width: 120px; height: 56px; }
+.region-shape.kyushu { bottom: 38px; left: 32px; width: 115px; height: 100px; }
+
+.scout-decision {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px;
+  align-items: end;
+}
+.scout-result-box {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px dashed #bfdbfe;
+}
+
+@media (max-width: 560px) {
+  .japan-map { height: 440px; }
+  .region-shape { font-size: 0.8rem; border-radius: 14px; }
+  .region-shape.hokkaido { top: 18px; right: 20px; width: 145px; height: 58px; }
+  .region-shape.kanto { top: 128px; right: 35px; width: 105px; height: 68px; }
+  .region-shape.hokuriku { top: 118px; right: 145px; width: 95px; height: 58px; }
+  .region-shape.chubu { top: 188px; right: 145px; width: 95px; height: 58px; }
+  .region-shape.tokai { top: 205px; right: 35px; width: 95px; height: 58px; }
+  .region-shape.kinki { top: 255px; right: 145px; width: 95px; height: 58px; }
+  .region-shape.chugoku { top: 250px; left: 72px; width: 95px; height: 58px; }
+  .region-shape.shikoku { top: 323px; left: 120px; width: 95px; height: 50px; }
+  .region-shape.kyushu { bottom: 28px; left: 24px; width: 92px; height: 82px; }
+  .scout-decision { grid-template-columns: 1fr; }
+}
+
+/* v15: 選手別練習・スカウトタブ・補正 */
+.player-training-select {
+  margin-top: 4px;
+  width: 100%;
+  font-weight: 800;
+}
+.mini-label {
+  display: block;
+  font-size: .76rem;
+  color: #64748b;
+  font-weight: 900;
+  margin-top: 4px;
+}
+.menu-cat-spike { background: #ffe4e6; }
+.menu-cat-receive { background: #dcfce7; }
+.menu-cat-block { background: #e0e7ff; }
+.menu-cat-serve { background: #fef3c7; }
+.menu-cat-toss { background: #f3e8ff; }
+.menu-cat-physical { background: #e0f2fe; }
+.menu-cat-mental { background: #fce7f3; }
+.menu-cat-team { background: #f1f5f9; }
+
+.scout-tab-card {
+  display: grid;
+  grid-template-columns: 64px minmax(0,1fr);
+  gap: 10px;
+  align-items: center;
+}
+.scout-tab-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid #dbeafe;
+}
+.scouted-tab-list {
+  display: grid;
+  gap: 10px;
+}
+
+.hidden{display:none!important;}
+
+/* v16 */
+.menu-cat-team,
+.menu-cat-omakase {
+  background: #f1f5f9;
+}
+.match-stat-team,
+.match-stat-player {
+  padding: 5px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.match-stat-player:last-child,
+.match-stat-team:last-child {
+  border-bottom: none;
+}
+
+/* v19: 試合前スタメン表示 */
+.match-lineups {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+.match-lineups h3 {
+  margin: 0 0 8px;
+}
+.match-lineups h4 {
+  margin: 10px 0 6px;
+  color: #1e3a8a;
+}
+.match-lineup-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 8px;
+}
+.match-lineup-card {
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  padding: 8px;
+}
+.lineup-pos-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.lineup-pos {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 2px 7px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 900;
+  font-size: .75rem;
+}
+.lineup-player-name {
+  display: block;
+  margin-top: 2px;
+}
+.lineup-position-grade {
+  flex: 0 0 auto;
+}
+@media (max-width: 560px) {
+  .match-lineup-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v22: 相手顔グラ・省スペース能力表示 */
+.match-lineup-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0,1fr);
+  gap: 8px;
+  align-items: start;
+}
+.lineup-face {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #dbeafe;
+  background: #fff;
+  grid-column: 1;
+  grid-row: 1;
+}
+.lineup-main {
+  grid-column: 2;
+  grid-row: 1;
+}
+.match-lineup-stats {
+  grid-column: 1 / -1;
+}
+.lineup-stat {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 4px 2px;
+  text-align: center;
+  background: #fff;
+}
+.lineup-stat strong {
+  display: block;
+  font-size: 1.02rem;
+  line-height: 1.05;
+}
+.stat-label-image {
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0 !important;
+  background: transparent !important;
+  aspect-ratio: auto !important;
+}
+.starter-card img.stat-label-image {
+  width: auto;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+.stat-label-image.lineup {
+  width: 26px;
+  height: 26px;
+}
+.stat-label-image.starter {
+  width: 22px;
+  height: 22px;
+}
+.stat-label-fallback {
+  display: inline-block;
+  font-size: .62rem;
+  color: #64748b;
+  font-weight: 800;
+  line-height: 1.05;
+}
+@media (max-width: 560px) {
+  .lineup-stat-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
+
+/* v22: スカウト地図復旧 */
+.scout-map-card {
+  width: min(760px, calc(100vw - 24px));
+}
+@media (max-width: 560px) {
+}
+
+/* v23: スカウト画面のポジション完成度表示 */
+.scout-position-grid {
+  margin-top: 8px;
+  grid-template-columns: repeat(5, minmax(0,1fr));
+}
+.scout-tab-card {
+  align-items: start;
+}
+@media (max-width: 560px) {
+  .scout-position-grid {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+/* v91: モーダルの重なりは --z-modal スケールで一元管理する（下部の統合レイヤー参照） */
+.scout-detail-card{width:min(920px,calc(100vw - 24px))}
+button.small {
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: .85rem;
+}
+
+/* v91: aprilRecruitModal の重なりも統合レイヤーで管理 */
+.april-recruit-card{width:min(960px,calc(100vw - 24px))}
+.april-recruit-list {
+  display: grid;
+  gap: 8px;
+}
+
+/* v36 */
+.roster-list {
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.candidate-pos {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin: 2px 4px 2px 0;
+  font-weight: 800;
+}
+
+/* v38 */
+.starter-card select.starter-select {
+  margin-top: 6px;
+  padding: 8px;
+  font-size: .85rem;
+}
+#preMatchLineups {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #f8fbff;
+  padding: 10px;
+  max-height: 520px;
+  overflow: auto;
+}
+#preMatchLineups .match-lineups h3 {
+  margin-top: 0;
+}
+
+/* v49 */
+.starter-control-card {
+  grid-column: 1 / -1;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: #f8fbff;
+}
+.lineup-libero {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font-size: .9rem;
+}
+.action-row select.starter-select {
+  max-width: 220px;
+}
+
+/* v50 */
+.starter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.starter-court-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.starter-court-card {
+  min-height: 0;
+}
+.starter-libero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.starter-libero-card {
+  max-width: 360px;
+  margin: 0 auto;
+  border-style: dashed;
+  background: #fffdf6;
+}
+@media (max-width: 720px) {
+  .starter-court-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v51 */
+#dashboard > .grid.two-col {
+  grid-template-columns: 3fr 1fr;
+  align-items: start;
+}
+#starterGrid.starter-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px;
+}
+.starter-court-layout {
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(150px, 1fr)) !important;
+}
+/* v192: 上の !important が 720px以下の1列指定を打ち消していて、
+   狭い画面（3×150px=450px以上必要）で横スクロールが出ていた。ここで打ち消し返す（Tak指示）。 */
+@media (max-width: 720px) {
+  .starter-court-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+.starter-libero-row {
+  width: 100%;
+  display: flex !important;
+  justify-content: center;
+  grid-column: 1 / -1;
+}
+.starter-libero-card {
+  width: min(360px, 100%);
+  max-width: 360px;
+}
+.starter-headline {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+.starter-headline img.player-face {
+  width: 54px !important;
+  height: 54px !important;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  object-fit: cover;
+}
+.starter-name-block {
+  min-width: 0;
+}
+.starter-position-grade,
+.lineup-position-grade {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  min-height: 26px;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-weight: 900;
+  line-height: 1;
+  background: #fff;
+}
+.lineup-position-grade {
+  font-size: 1rem;
+  min-width: 34px;
+  min-height: 28px;
+}
+.starter-position-grade {
+  font-size: .98rem;
+}
+.starter-position-grade {
+  align-self: center;
+}
+.starter-slot-role {
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-size: .86rem;
+}
+.starter-mini-grades {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 8px 0;
+}
+.starter-mini-grade-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 6px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 36px;
+  font-size: .76rem;
+}
+.starter-mini-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 3px;
+  flex: 0 0 auto;
+  border: 1px solid #f3c2d7;
+  border-radius: 5px;
+  background: #fff8fc;
+  box-sizing: border-box;
+}
+.starter-mini-grade-item strong {
+  line-height: 1;
+  font-size: 1.12rem;
+}
+@media (max-width: 900px) {
+  #dashboard > .grid.two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v52 important popup queue */
+.important-popup-card {
+  max-width: 760px;
+}
+.scout-result-head {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.scout-result-face {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #eef4ff;
+}
+.popup-kind {
+  display: none;
+}
+.growth-item strong {
+  font-weight: 800;
+}
+
+/* v53 */
+.gold-special-chip {
+  border-color: #b88700 !important;
+  background: linear-gradient(135deg, #fff6c7, #ffd45a) !important;
+  color: #5a3a00 !important;
+  box-shadow: 0 0 0 1px rgba(184,135,0,.25), 0 0 12px rgba(255,212,90,.45);
+}
+.popup-gold-special + .growth-manager,
+.popup-gold-special ~ .growth-item {
+  border-color: #d8a600;
+}
+
+/* v56 watch match */
+.substitution-panel {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px;
+  background: #f8fbff;
+}
+.substitution-panel.disabled {
+  opacity: .65;
+}
+.sub-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: end;
+}
+.sub-select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  background: #fff;
+}
+.sub-candidate-detail {
+  margin-top: 8px;
+  font-size: .84rem;
+}
+.watch-point-divider {
+  border-top: 2px solid var(--line);
+  margin-top: 10px;
+  padding-top: 8px;
+}
+@media (max-width: 760px){
+  .sub-row { grid-template-columns: 1fr; }
+}
+
+button.secondary {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-weight: 800;
+  cursor: pointer;
+  background: #dbeafe;
+  color: var(--primary-dark);
+}
+button.secondary:disabled, button.primary:disabled, button.ghost:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* v58 bench slots */
+.starter-bench-section {
+  width: 100%;
+}
+.starter-bench-title {
+  font-weight: 800;
+  margin: 4px 0 8px;
+  color: var(--primary-dark);
+}
+.starter-bench-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 12px;
+}
+.starter-bench-card {
+  background: #f9fafb;
+}
+.starter-bench-card.empty {
+  display: flex;
+  min-height: 112px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-style: dashed;
+  color: var(--muted);
+}
+@media (max-width: 720px) {
+  .starter-bench-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v61 */
+.roster-assignment {
+  font-weight: 900;
+  color: var(--primary-dark);
+  min-width: 54px;
+  text-align: right;
+}
+
+
+/* v8: monthly action / focused training */
+.choice-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.individual-training-card {
+  margin-bottom: 14px;
+}
+.individual-training-controls {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(180px, 1.2fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+.individual-training-controls .field-label {
+  margin: 0 0 4px;
+}
+.individual-training-controls button {
+  min-height: 44px;
+}
+@media (max-width: 760px) {
+  .choice-buttons,
+  .individual-training-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.individual-training-controls .field-group {
+  min-width: 0;
+}
+
+
+/* v9: monthly action has four options */
+.monthly-action-card .choice-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+.monthly-action-card .choice-buttons button {
+  min-height: 44px;
+}
+
+
+/* v14: event illustrations in modal popups */
+.popup-illustration{
+  margin: 4px 0 14px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #dbe7ff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, .10);
+  background: #fff;
+}
+.popup-illustration img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* v28: acupuncture player dropdown */
+.acupuncture-select-box{
+  display:flex;
+  gap:10px;
+  align-items:end;
+  flex-wrap:wrap;
+}
+.acupuncture-select-box .starter-select{
+  min-width:260px;
+}
+
+
+/* v32 custom title and coach screen */
+.title-wrap{display:flex;align-items:center;min-width:0}.title-logo{display:block;max-width:min(100%,640px);width:min(100%,640px);height:auto}.topbar{align-items:center}.coach-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.coach-action-btn{border:1px solid var(--line);background:#f7fbff;color:var(--primary-dark);border-radius:16px;padding:12px 14px;font-weight:900;cursor:pointer;box-shadow:var(--shadow)}.coach-action-btn.active{background:linear-gradient(135deg,#3a7dff,#245ec8);color:#fff;border-color:#245ec8}.coach-action-summary{padding:12px 14px;border-radius:16px;background:#f8fbff;border:1px solid #dbeafe;color:#17305a;font-weight:800;line-height:1.5}.coach-inline-settings{display:grid;grid-template-columns:1fr 1fr;gap:12px}.match-stage-banner{display:flex;justify-content:center;align-items:center;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;color:#1d4ed8;font-weight:900;text-align:center}.title-wrap,.topbar>div:first-child{min-width:0}.starter-mini-grades{grid-template-columns:repeat(4,1fr)}.matchup-box.top-gap{margin-top:10px}@media (max-width:900px){.coach-inline-settings,.coach-action-grid{grid-template-columns:1fr}.title-logo{max-width:100%}}
+
+
+/* v33: title screen and compact stat labels */
+.title-screen{
+  position:fixed;
+  inset:0;
+  z-index:9500; /* v91: モーダル(9000〜9200)より上、ツールチップ(30000)より下 */
+  background:#050814;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.title-screen.hidden{display:none;}
+.title-screen-bg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.title-start-btn{
+  position:absolute;
+  left:50%;
+  bottom:7.5%;
+  transform:translateX(-50%);
+  min-width:220px;
+  padding:18px 52px;
+  border-radius:999px;
+  border:2px solid #f9d56a;
+  color:#fff5c7;
+  background:linear-gradient(180deg,#b91c1c,#7f1d1d);
+  box-shadow:0 12px 32px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.35);
+  font-weight:1000;
+  font-size:2rem;
+  letter-spacing:.25em;
+  cursor:pointer;
+}
+.title-start-btn:hover{filter:brightness(1.08);transform:translateX(-50%) translateY(-2px);}
+.title-logo{
+  max-height:96px;
+  width:auto;
+  max-width:min(520px,55vw);
+  object-fit:contain;
+}
+.lineup-stat-label,
+.starter-mini-label{
+  min-width:24px;
+  min-height:24px;
+  padding:2px;
+}
+.stat-label-image.lineup{
+  width:21px;
+  height:21px;
+}
+.stat-label-image.starter{
+  width:19px;
+  height:19px;
+}
+.stat-label-fallback{
+  font-size:.56rem;
+  letter-spacing:-.04em;
+}
+.starter-mini-grade-item{
+  padding:3px 4px;
+  gap:3px;
+}
+.starter-mini-grade-item strong{
+  font-size:.98rem;
+}
+.lineup-stat{
+  padding:3px 1px;
+}
+@media (max-width:720px){
+  .title-start-btn{font-size:1.35rem;min-width:170px;padding:13px 34px;}
+  .title-logo{max-width:62vw;max-height:76px;}
+}
+
+.level-down{display:inline-flex;border-radius:999px;padding:1px 7px;background:#fee2e2;color:#b91c1c;font-weight:900}
+
+.makeover-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:10px;margin-top:12px}
+.makeover-choice{border:1px solid #dbeafe;background:#fff;border-radius:14px;padding:8px;display:grid;gap:6px;justify-items:center;font-weight:900;color:#1d4ed8;cursor:pointer}
+.makeover-choice img{width:76px;height:76px;border-radius:14px;object-fit:cover}
+.makeover-choice.no-change{min-height:96px;align-content:center;background:#f8fafc;color:#475569}
+.makeover-current{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px;border:1px solid #dbeafe;border-radius:14px;background:#f8fbff}
+.makeover-current img{width:64px;height:64px;border-radius:14px;object-fit:cover}
+
+.sub-candidate-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:8px;
+}
+.sub-candidate-card{
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr);
+  gap:8px;
+  align-items:start;
+  text-align:left;
+  width:100%;
+  border:1px solid #dbeafe;
+  border-radius:12px;
+  background:#fff;
+  padding:8px;
+  cursor:pointer;
+}
+.sub-candidate-card.active{
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(58,125,255,.18);
+}
+.sub-candidate-card .match-lineup-stats{
+  grid-column:1 / -1;
+}
+@media (max-width:760px){
+  .sub-candidate-grid{grid-template-columns:1fr;}
+}
+.special-tooltip{
+  position:relative;
+  cursor:help;
+}
+.special-tooltip:hover::after,
+.special-tooltip:focus::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 8px);
+  transform:translateX(-50%);
+  width:max-content;
+  max-width:260px;
+  white-space:normal;
+  z-index:30000;
+  background:#0f172a;
+  color:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:.78rem;
+  line-height:1.45;
+  font-weight:800;
+  box-shadow:0 10px 28px rgba(15,23,42,.28);
+}
+.special-tooltip:hover::before,
+.special-tooltip:focus::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 2px);
+  transform:translateX(-50%);
+  border:6px solid transparent;
+  border-top-color:#0f172a;
+  z-index:30001;
+}
+
+/* v38: intro flow */
+.intro-flow-card{width:min(760px,calc(100vw - 28px));}
+.intro-narration{
+  background:linear-gradient(180deg,#f8fbff,#eef6ff);
+  border:1px solid #dbeafe;
+  border-radius:18px;
+  padding:16px;
+  color:#172554;
+  font-weight:900;
+  line-height:1.7;
+}
+.manager-select-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.manager-select-card{
+  border:1px solid #dbeafe;
+  background:#fff;
+  border-radius:18px;
+  padding:10px;
+  cursor:pointer;
+  font-weight:900;
+  color:#1d4ed8;
+  box-shadow:var(--shadow);
+}
+.manager-select-card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:14px;
+  display:block;
+  margin-bottom:8px;
+}
+.school-name-input{
+  width:100%;
+  border:1px solid #bfdbfe;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:1.1rem;
+  font-weight:900;
+  margin-top:10px;
+}
+.intro-manager-line{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+}
+.intro-manager-line img{
+  width:72px;height:72px;border-radius:18px;object-fit:cover;border:3px solid #dbeafe;background:#fff;
+}
+
+.manager-inline-name{font-weight:700;margin-right:6px;white-space:nowrap;}
+.manager-face-select-btn small{opacity:.75;font-size:12px;}
+
+/* v60: マネージャーログ横書き固定 */
+.manager-inline{
+  grid-template-columns: 30px max-content minmax(0, 1fr);
+}
+/* v185: 発言枠の中では顔グラを出さない（Tak指示）ため、列は名前＋本文の2つ */
+.manager-inline.no-icon{
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+.manager-inline span,
+.manager-inline-name,
+.manager-message,
+.manager-log-bubble,
+.manager-log-text{
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+.manager-inline-name{
+  display:inline-block;
+  min-width:max-content;
+}
+
+/* v69: スカウト画面の噂一覧 */
+.scout-rumor-panel{
+  margin: 10px 0 14px;
+  padding: 12px;
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+  border-radius: 14px;
+}
+.scout-rumor-title{
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.scout-rumor-list{
+  display: grid;
+  gap: 8px;
+}
+.scout-rumor-card{
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #facc15;
+}
+
+/* v73: イベントポップアップ画像を一回り小さく */
+.popup-illustration{
+  max-width: 86%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.popup-illustration img{
+  max-height: 260px;
+  object-fit: contain;
+}
+@media (max-width: 640px){
+  .popup-illustration{max-width: 92%;}
+  .popup-illustration img{max-height: 220px;}
+}
+
+/* v76: チーム画面の控え選手一覧 */
+.starter-reserve-section{
+  margin-top: 14px;
+}
+.starter-reserve-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.starter-reserve-card{
+  cursor: pointer;
+}
+@media (max-width: 900px){
+  .starter-reserve-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* v78: モーダル閉じるボタンを下部固定寄せ */
+#importantPopupCard{}
+#growthModal .important-popup-card{
+  max-height: min(92vh, 860px);
+  display: flex;
+  flex-direction: column;
+}
+#growthModalContent{
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+.modal-bottom-actions{
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 2px;
+  background: linear-gradient(to top, #fff 75%, rgba(255,255,255,.86));
+  border-top: 1px solid #e5e7eb;
+}
+.modal-bottom-actions button{
+  min-width: 180px;
+}
+
+/* v78: 試合ログの見やすい表示 */
+.match-play-line{
+  padding: 8px 10px;
+  margin: 5px 0;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  font-weight: 700;
+}
+.match-play-line.serve{background:#eef6ff;border-color:#bfdbfe;}
+.match-play-line.receive,.match-play-line.dig{background:#f0fdf4;border-color:#bbf7d0;}
+.match-play-line.attack{background:#fff7ed;border-color:#fed7aa;}
+.match-play-line.block{background:#f5f3ff;border-color:#ddd6fe;}
+.match-result-line{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  margin:8px 0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fff7ed,#fee2e2);
+  border:1px solid #fdba74;
+  font-weight:900;
+}
+.match-result-text{
+  font-size:1.02rem;
+}
+.score-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#0f172a;
+  color:#fff;
+  font-weight:900;
+  white-space:nowrap;
+}
+.score-own{
+  color:#60a5fa;
+  font-size:1.12em;
+}
+.score-opp{
+  color:#f97316;
+  font-size:1.12em;
+}
+.score-sep{
+  color:#e5e7eb;
+  font-size:.9em;
+}
+
+/* v79: スカウト噂表示とローテーションボタン */
+.rotation-header-btn{
+  border:0;
+  cursor:pointer;
+  font-weight:800;
+}
+.rotation-header-btn:hover{
+  filter:brightness(.96);
+}
+.scout-map-rumors{
+  margin-top:10px;
+  display:grid;
+  gap:8px;
+}
+.scout-map-rumor-title{
+  font-weight:800;
+}
+.scout-map-rumor-card{
+  padding:10px;
+  border-radius:12px;
+  background:#fff7ed;
+  border:1px solid #fdba74;
+}
+
+/* v81: イベント画像固定・本文のみスクロール */
+#growthModalContent{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  overflow:hidden;
+}
+#growthModalContent .popup-illustration{
+  flex:0 0 auto;
+  margin-bottom:10px;
+}
+#growthModalContent .popup-illustration img{
+  display:block;
+}
+#growthModalContent .popup-scroll-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  padding-right:4px;
+}
+
+/* v83: 練習試合の誘い */
+.event-choice-box .primary.small,
+.event-choice-box .ghost.small{
+  min-width: 96px;
+}
+
+/* v85: バレー留学イベント */
+.study-abroad-box{
+  display:grid;
+  gap:8px;
+}
+.event-short-copy{
+  padding:10px 12px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  line-height:1.65;
+}
+
+/* v87: 試合ログ実況化 */
+.match-narration-line{
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+.match-play-line.continue{
+  background:#f8fafc;
+  border-color:#cbd5e1;
+  font-weight:700;
+}
+.match-result-line .match-result-text{
+  letter-spacing:.02em;
+}
+
+/* v88: 監督活動 */
+.coach-action-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+#coachDirectorSettings{
+  align-items:end;
+}
+.compact-event-summary{
+  padding:10px 12px;
+  border-radius:14px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  line-height:1.55;
+  font-weight:700;
+}
+.compact-effect-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.compact-effect-chip{
+  padding:7px 10px;
+  border-radius:999px;
+  background:#f8fafc;
+  border:1px solid #dbeafe;
+  color:#17305a;
+  font-weight:900;
+  font-size:.88rem;
+}
+.compact-effect-more{
+  padding:7px 10px;
+  border-radius:999px;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  color:#9a3412;
+  font-weight:900;
+  font-size:.88rem;
+}
+
+/* v97: 試合ログをチャット風に左右分離 */
+.match-chat-entry{
+  display:flex;
+  margin:7px 0;
+  width:100%;
+}
+.match-chat-entry.own{
+  justify-content:flex-start;
+}
+.match-chat-entry.opp{
+  justify-content:flex-end;
+}
+.match-chat-entry.neutral{
+  justify-content:center;
+}
+.match-chat-bubble{
+  max-width:min(84%,720px);
+  border-radius:18px;
+  padding:0;
+}
+.match-chat-entry.own .match-chat-bubble{
+  background:#eff6ff;
+  border:1px solid #bfdbfe;
+  border-bottom-left-radius:6px;
+}
+.match-chat-entry.opp .match-chat-bubble{
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  border-bottom-right-radius:6px;
+}
+.match-chat-entry.neutral .match-chat-bubble{
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+}
+.match-chat-bubble .match-play-line,
+.match-chat-bubble .match-result-line{
+  margin:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.match-chat-entry.opp .match-play-line,
+.match-chat-entry.opp .match-result-line{
+  text-align:left;
+}
+.match-chat-entry.opp .score-badge{
+  order:-1;
+}
+.opp-mini-icon{
+  border-color:#fed7aa;
+}
+.match-chat-entry .mini-icon{
+  width:26px;
+  height:26px;
+}
+.match-chat-entry.opp .opp-name{
+  color:#b45309;
+}
+.match-chat-entry.own .own-name{
+  color:#1d4ed8;
+}
+.event-detail-drawer{
+  border:1px solid #e5e7eb;
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+}
+.event-detail-drawer summary{
+  cursor:pointer;
+  padding:10px 12px;
+  font-weight:900;
+  color:#1d4ed8;
+  background:#f8fbff;
+  list-style:none;
+}
+.event-detail-drawer summary::-webkit-details-marker{display:none;}
+.event-detail-drawer summary::after{
+  content:'＋';
+  float:right;
+  color:#64748b;
+}
+.event-detail-drawer[open] summary::after{content:'−';}
+.event-detail-list{
+  display:grid;
+  gap:6px;
+  padding:10px 12px 12px;
+  max-height:220px;
+  overflow:auto;
+}
+.event-detail-line{
+  padding:8px 10px;
+  border-radius:10px;
+  background:#f8fafc;
+  border:1px solid #edf2f7;
+  font-size:.9rem;
+  line-height:1.45;
+}
+.important-popup-card .modal-bottom-actions .primary{
+  min-width:160px;
+}
+
+
+/* v100: パワプロ系のテンポを意識したイベント体験 */
+.event-tempo-card{
+  display:grid;
+  gap:12px;
+}
+.event-tempo-head{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.event-tempo-face{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  object-fit:cover;
+  border:2px solid #bfdbfe;
+  background:#fff;
+  flex:0 0 auto;
+}
+.event-beat{
+  display:grid;
+  gap:6px;
+}
+.event-beat-label{
+  width:max-content;
+  padding:3px 9px;
+  border-radius:999px;
+  background:#1d4ed8;
+  color:#fff;
+  font-size:.78rem;
+  font-weight:900;
+}
+.compact-effect-chip span{
+  display:inline-block;
+  margin-right:6px;
+  padding:2px 6px;
+  border-radius:999px;
+  background:#dbeafe;
+  color:#1d4ed8;
+  font-size:.75rem;
+}
+.director-event-scene{
+  margin-top:14px;
+  padding:14px;
+  border-radius:18px;
+  background:#f8fbff;
+  border:1px solid #dbeafe;
+}
+.director-scene-head{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.director-scene-head p{
+  margin:6px 0 0;
+  font-weight:800;
+  line-height:1.55;
+  color:#17305a;
+}
+.director-choice-area{
+  display:grid;
+  gap:10px;
+  margin-top:12px;
+}
+.director-choice-btn{
+  width:100%;
+  text-align:left;
+  border:1px solid #bfdbfe;
+  background:#fff;
+  border-radius:16px;
+  padding:12px 14px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(15,23,42,.06);
+}
+.director-choice-btn:hover{
+  transform:translateY(-1px);
+  border-color:#60a5fa;
+  background:#eff6ff;
+}
+.director-choice-btn span{
+  display:block;
+  color:#1d4ed8;
+  font-weight:900;
+  font-size:1rem;
+}
+.director-choice-btn small{
+  display:block;
+  margin-top:4px;
+  color:#64748b;
+  font-weight:800;
+  line-height:1.4;
+}
+.director-result-popup .compact-event-summary{
+  font-size:1rem;
+}
+
+
+/* v101: イベントのナレーションをタイトル直下に接続 */
+.event-narration-text{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  color:#17305a;
+  font-weight:800;
+  line-height:1.55;
+}
+.match-growth-event .compact-effect-chip{
+  align-items:flex-start;
+}
+
+
+/* v102: チーム画面の利き腕表示 */
+.hand-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:20px;
+  height:20px;
+  margin-left:6px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:900;
+  vertical-align:middle;
+  border:1px solid #dbeafe;
+  background:#f8fafc;
+  color:#334155;
+}
+.hand-badge.lefty{
+  background:#fef3c7;
+  border-color:#fbbf24;
+  color:#92400e;
+}
+.hand-badge.righty{
+  background:#eff6ff;
+  border-color:#bfdbfe;
+  color:#1d4ed8;
+}
+
+
+/* v102: 利き手バッジ */
+.hand-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;
+  height:20px;
+  margin-left:6px;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:900;
+  vertical-align:middle;
+  border:1px solid #cbd5e1;
+  background:#f8fafc;
+  color:#334155;
+}
+.hand-badge.hand-左{
+  background:#eef2ff;
+  border-color:#c7d2fe;
+  color:#3730a3;
+}
+.hand-badge.hand-右{
+  background:#ecfeff;
+  border-color:#a5f3fc;
+  color:#155e75;
+}
+
+
+/* v104 */
+.individual-training-controls.compact{
+  display:grid;
+  gap:10px;
+}
+.individual-modal-layout{
+  display:grid;
+  gap:12px;
+}
+.scouted-mini{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px;
+  border-radius:14px;
+  border:1px solid #e5e7eb;
+  background:#fff;
+  margin-bottom:8px;
+}
+.scouted-mini img{
+  width:42px;
+  height:42px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.coach-rumor-panel{
+  grid-column:1 / -1;
+}
+.scout-result-popup.great-success .scout-result-head{
+  background:linear-gradient(135deg,#fff7ed,#fef3c7);
+  border-color:#f59e0b;
+}
+
+
+/* v105 */
+.tabs{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.tab-left{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.global-advance-btn{
+  margin-left:auto;
+  white-space:nowrap;
+}
+.lineup-meta-line{
+  margin-top:6px;
+  color:#475569;
+  font-weight:800;
+  font-size:.88rem;
+}
+.event-choice-actions.vertical{
+  display:grid;
+  gap:8px;
+}
+
+
+/* v108: イベントを2画面テンポに分割 */
+.event-seq-card{
+  display:grid;
+  gap:12px;
+}
+.manager-select-card.locked{
+  opacity:.48;
+  filter:grayscale(.45);
+  cursor:not-allowed;
+}
+.manager-select-card.current{
+  outline:3px solid #f59e0b;
+}
+.manager-select-card small{
+  display:block;
+  margin-top:6px;
+  color:#64748b;
+  font-weight:800;
+  line-height:1.35;
+}
+.manager-select-card em{
+  display:block;
+  margin-top:6px;
+  color:#b45309;
+  font-style:normal;
+  font-weight:900;
+}
+.april-recruit-card .hint{
+  line-height:1.55;
+}
+
+
+/* v111 */
+.match-lineups.muted{
+  padding:14px;
+  border:1px dashed #cbd5e1;
+  border-radius:16px;
+  background:#f8fafc;
+}
+
+
+/* v118: 相手能力表示を自チームスタメンと同じ見え方に統一 */
+.opponent-starter-grade-wrap .starter-mini-grades{
+  margin-top:8px;
+  margin-bottom:0;
+}
+.lineup-libero .opponent-starter-grade-wrap{
+  display:block;
+  margin-top:6px;
+}
+
+
+/* v121: 相手能力表示の崩れ修正 */
+.opponent-ability-grid{
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 10px;
+}
+.opponent-ability-card{
+  grid-template-columns: 64px minmax(0,1fr);
+  padding: 10px;
+}
+.opponent-ability-card .lineup-face{
+  width:64px;
+  height:64px;
+}
+.opponent-ability-card .opponent-starter-grade-wrap{
+  grid-column: 1 / -1;
+  width:100%;
+  min-width:0;
+}
+.opponent-ability-card .starter-mini-grades{
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap:5px;
+  margin:8px 0 0;
+}
+.opponent-ability-card .starter-mini-grade-item{
+  min-height:34px;
+  padding:4px 5px;
+}
+.opponent-ability-card .starter-mini-label{
+  min-width:28px;
+  min-height:28px;
+}
+@media (max-width: 900px){
+  .opponent-ability-grid{
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px){
+  .opponent-ability-card .starter-mini-grades,
+  .opponent-ability-libero .starter-mini-grades{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+
+/* v127: 進行ボタンが押せない問題への安全策 */
+.modal.hidden{
+  display:none !important;
+  pointer-events:none !important;
+}
+#advanceMonthBtn.global-advance-btn{
+  pointer-events:auto;
+}
+
+
+/* v130: 試合画面の相手スタメンを横3人×縦2行に固定 */
+.opponent-ability-grid{
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+.opponent-ability-card{
+  grid-template-columns: 48px minmax(0,1fr) !important;
+  padding: 8px !important;
+}
+.opponent-ability-card .lineup-face{
+  width:48px !important;
+  height:48px !important;
+}
+.opponent-ability-card .lineup-player-name{
+  font-size:.86rem;
+}
+.opponent-ability-card .lineup-pos-row{
+  gap:6px;
+}
+.opponent-ability-card .opponent-starter-grade-wrap{
+  grid-column: 1 / -1;
+}
+.opponent-ability-card .starter-mini-grades,
+.opponent-ability-libero .starter-mini-grades{
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap:4px !important;
+}
+.opponent-ability-card .starter-mini-grade-item{
+  min-height:30px;
+  padding:3px 4px;
+}
+@media (max-width: 900px){
+  .opponent-ability-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  }
+}
+@media (max-width: 560px){
+  .opponent-ability-card{
+    grid-template-columns: 1fr !important;
+  }
+  .opponent-ability-card .lineup-face{
+    display:none;
+  }
+  .opponent-ability-card .starter-mini-label{
+    min-width:22px;
+    min-height:22px;
+  }
+}
+
+/* v130: チーム画面の試合用レーダー評価 */
+#teamSummary.summary-stack{
+  display:block;
+}
+.team-radar-card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+  padding:12px;
+}
+.team-radar-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:baseline;
+  margin-bottom:6px;
+}
+.team-radar-head strong{
+  color:#1e3a8a;
+  font-size:1rem;
+}
+.team-radar-head span{
+  color:#64748b;
+  font-size:.78rem;
+  font-weight:800;
+}
+.team-radar-svg{
+  width:100%;
+  max-width:360px;
+  display:block;
+  margin:0 auto 8px;
+}
+.team-radar-ring{
+  fill:none;
+  stroke:#dbeafe;
+  stroke-width:1;
+}
+.team-radar-axis{
+  stroke:#e2e8f0;
+  stroke-width:1;
+}
+.team-radar-polygon{
+  fill:rgba(37,99,235,.20);
+  stroke:#2563eb;
+  stroke-width:3;
+}
+.team-radar-label{
+  font-size:12px;
+  font-weight:900;
+  fill:#334155;
+  dominant-baseline:middle;
+}
+.team-radar-label.start{text-anchor:start;}
+.team-radar-label.middle{text-anchor:middle;}
+.team-radar-label.end{text-anchor:end;}
+.team-radar-list{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:6px;
+}
+.team-radar-row{
+  display:grid;
+  grid-template-columns:56px 70px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+  padding:6px 8px;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  background:#fff;
+}
+.team-radar-row span{
+  font-weight:900;
+  color:#334155;
+}
+.team-radar-row strong{
+  font-size:.95rem;
+  text-align:right;
+}
+.team-radar-row strong em{
+  font-style:normal;
+  font-size:.78rem;
+  margin-left:3px;
+}
+.team-radar-row small{
+  color:#64748b;
+  font-weight:700;
+  line-height:1.25;
+}
+@media (max-width:560px){
+  .team-radar-row{
+    grid-template-columns:48px 64px minmax(0,1fr);
+    font-size:.85rem;
+  }
+  .team-radar-row small{
+    font-size:.72rem;
+  }
+}
+
+
+/* v131: チーム評価のマネージャー分析 */
+.team-radar-analysis-controls{
+  display:flex;
+  justify-content:center;
+  margin-top:10px;
+}
+.team-radar-analysis-controls button{
+  width:100%;
+  max-width:260px;
+}
+.team-manager-analysis{
+  margin-top:10px;
+  border:1px solid #bfdbfe;
+  border-radius:14px;
+  background:#f8fbff;
+  padding:10px;
+}
+.team-manager-analysis ul{
+  margin:8px 0 0 1.1em;
+  padding:0;
+  display:grid;
+  gap:6px;
+}
+.team-manager-analysis li{
+  color:#334155;
+  font-weight:800;
+  line-height:1.45;
+}
+.team-manager-actions{
+  margin-top:10px;
+  display:grid;
+  gap:6px;
+}
+.team-manager-actions strong{
+  color:#1e3a8a;
+}
+.team-manager-actions span{
+  display:block;
+  border:1px solid #dbeafe;
+  border-radius:999px;
+  background:#fff;
+  padding:6px 9px;
+  color:#334155;
+  font-size:.82rem;
+  font-weight:900;
+}
+
+
+/* v133: 試合前の自校・相手校比較レーダー */
+.comparison-radar-card{
+  margin:10px 0 12px;
+  border:1px solid #cbd5e1;
+  border-radius:16px;
+  background:#fff;
+  padding:10px;
+}
+.comparison-radar-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:baseline;
+  margin-bottom:4px;
+}
+.comparison-radar-head strong{
+  color:#1e3a8a;
+  font-size:1rem;
+}
+.comparison-radar-head span{
+  color:#64748b;
+  font-size:.78rem;
+  font-weight:900;
+}
+.comparison-radar-svg{
+  width:100%;
+  max-width:360px;
+  display:block;
+  margin:0 auto;
+}
+.comparison-radar-own{
+  fill:rgba(37,99,235,.20);
+  stroke:#2563eb;
+  stroke-width:3;
+}
+.comparison-radar-opp{
+  fill:rgba(239,68,68,.16);
+  stroke:#ef4444;
+  stroke-width:3;
+}
+.comparison-radar-legend{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:2px 0 8px;
+  font-size:.82rem;
+  font-weight:900;
+}
+.comparison-radar-legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.comparison-radar-legend .own::before,
+.comparison-radar-legend .opp::before{
+  content:'';
+  width:12px;
+  height:12px;
+  border-radius:999px;
+  display:inline-block;
+}
+.comparison-radar-legend .own::before{background:#2563eb;}
+.comparison-radar-legend .opp::before{background:#ef4444;}
+.comparison-radar-table{
+  display:grid;
+  gap:4px;
+}
+.comparison-radar-row{
+  display:grid;
+  grid-template-columns:1fr 48px 48px 58px;
+  gap:6px;
+  align-items:center;
+  padding:5px 7px;
+  border-radius:10px;
+  background:#f8fafc;
+  font-size:.82rem;
+}
+.comparison-radar-row.head{
+  background:#e0f2fe;
+  color:#075985;
+  font-weight:900;
+}
+.comparison-radar-row span{
+  font-weight:900;
+  color:#334155;
+}
+.comparison-radar-row strong,
+.comparison-radar-row em{
+  text-align:right;
+  font-style:normal;
+  font-weight:900;
+}
+.comparison-radar-row small{
+  font-weight:900;
+  text-align:center;
+}
+.comparison-radar-row.own-adv small{color:#2563eb;}
+.comparison-radar-row.opp-adv small{color:#ef4444;}
+.comparison-radar-row.even small{color:#64748b;}
+@media (max-width:560px){
+  .comparison-radar-row{
+    grid-template-columns:1fr 40px 40px 48px;
+    font-size:.74rem;
+  }
+}
+
+/* v134: ブロック指示をポジション警戒型に変更 */
+#blockTargetSelect.sub-select{
+  font-weight:900;
+}
+
+
+/* v139: 調子を顔アイコンで表示 */
+.mood-badge-row{display:flex;align-items:center;gap:8px;margin:6px 0 8px;}
+.mood-badge.mood-badge-face{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  padding:0;
+  border-radius:999px;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 2px 8px rgba(15,23,42,.08);
+  vertical-align:middle;
+  margin-left:6px;
+}
+.mood-badge.mood-top{background:linear-gradient(180deg,#fff7bf,#fde68a);}
+.mood-badge.mood-good{background:linear-gradient(180deg,#e0f2fe,#bfdbfe);}
+.mood-badge.mood-normal{background:linear-gradient(180deg,#f8fafc,#e2e8f0);}
+.mood-badge.mood-bad{background:linear-gradient(180deg,#ede9fe,#ddd6fe);}
+.mood-badge.mood-worst{background:linear-gradient(180deg,#dbeafe,#bfdbfe);}
+.starter-name-block .name,.roster-item .name,.lineup-player-name{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+
+/* v139: イベント表示の簡潔化と文字組み調整 */
+.event-seq-card{gap:10px;}
+.event-tempo-head{align-items:flex-start;}
+.event-narration-text{
+  margin-top:4px;
+  line-height:1.65;
+  font-weight:800;
+  color:#1f2937;
+}
+.growth-manager{line-height:1.5;}
+.compact-effect-chip{
+  line-height:1.45;
+  white-space:normal;
+  word-break:break-word;
+}
+.compact-effect-chip span{margin-right:6px;}
+.event-detail-drawer summary{line-height:1.45;}
+.event-detail-line{word-break:break-word;}
+.event-beat-label{letter-spacing:.04em;}
+
+
+/* v140: セーブ管理 */
+.save-action-row{
+  flex-wrap:wrap;
+}
+.save-modal-card{
+  width:min(720px,94vw);
+  max-height:86vh;
+  overflow:auto;
+}
+.save-modal-body{
+  display:grid;
+  gap:12px;
+}
+.save-slot-list{
+  display:grid;
+  gap:10px;
+}
+.save-slot-card{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid #bfdbfe;
+  border-radius:16px;
+  background:#f8fbff;
+}
+.save-slot-card.empty{
+  border-style:dashed;
+  background:#f8fafc;
+}
+.save-slot-main{
+  display:grid;
+  gap:4px;
+}
+.save-slot-main strong{
+  color:#1e3a8a;
+}
+.save-slot-main span{
+  font-weight:900;
+  color:#334155;
+}
+.save-slot-main small{
+  color:#64748b;
+  font-weight:800;
+}
+.save-slot-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.save-file-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+@media (max-width:640px){
+  .save-slot-card{
+    grid-template-columns:1fr;
+  }
+  .save-slot-actions,.save-file-actions{
+    justify-content:flex-start;
+  }
+}
+
+
+/* v141: レーダー項目の説明をツールチップ化 */
+.team-radar-value{
+  font-size:12px;
+  font-weight:1000;
+  fill:#1e3a8a;
+  dominant-baseline:middle;
+  paint-order:stroke;
+  stroke:#ffffff;
+  stroke-width:3px;
+  stroke-linejoin:round;
+}
+.team-radar-value.start{text-anchor:start;}
+.team-radar-value.middle{text-anchor:middle;}
+.team-radar-value.end{text-anchor:end;}
+.team-radar-row.compact{
+  grid-template-columns: minmax(0,1fr) 86px;
+}
+.team-radar-row.compact small{
+  display:none;
+}
+.team-radar-tooltip{
+  position:relative;
+  cursor:help;
+  border-bottom:1px dotted #94a3b8;
+}
+.team-radar-tooltip:hover::after{
+  content:attr(data-tip);
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 8px);
+  z-index:20;
+  width:max-content;
+  max-width:260px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:#0f172a;
+  color:#fff;
+  font-size:.76rem;
+  font-weight:900;
+  line-height:1.45;
+  box-shadow:0 10px 24px rgba(15,23,42,.22);
+}
+.team-radar-tooltip:hover::before{
+  content:'';
+  position:absolute;
+  left:14px;
+  bottom:calc(100% + 2px);
+  border:6px solid transparent;
+  border-top-color:#0f172a;
+  z-index:21;
+}
+
+/* v141: 調子は表情ではなくタイトル・矢印・色で表示 */
+.mood-badge.mood-badge-face{
+  width:auto;
+  min-width:52px;
+  height:26px;
+  gap:4px;
+  padding:2px 7px;
+  border-radius:999px;
+  font-size:.72rem;
+  box-shadow:none;
+}
+.mood-title{
+  font-size:.66rem;
+  font-weight:1000;
+  line-height:1;
+}
+.mood-arrow{
+  font-size:.96rem;
+  font-weight:1000;
+  line-height:1;
+}
+.mood-badge.mood-top{background:#facc15;color:#713f12;border-color:#f59e0b;}
+.mood-badge.mood-good{background:#bfdbfe;color:#1d4ed8;border-color:#60a5fa;}
+.mood-badge.mood-normal{background:#e2e8f0;color:#334155;border-color:#cbd5e1;}
+.mood-badge.mood-bad{background:#fecaca;color:#b91c1c;border-color:#f87171;}
+.mood-badge.mood-worst{background:#93c5fd;color:#1e3a8a;border-color:#3b82f6;}
+
+
+/* v142: スカウトの噂の地域・ポジションを強調 */
+.scout-rumor-card-emphasis{
+  border:2px solid #f59e0b;
+  background:linear-gradient(180deg,#fff7ed,#ffffff);
+  box-shadow:0 8px 20px rgba(245,158,11,.14);
+}
+.scout-rumor-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+.scout-rumor-arrow{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#fef3c7;
+  color:#92400e;
+  font-size:.78rem;
+  font-weight:1000;
+}
+.scout-rumor-target{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:6px 0 8px;
+}
+.scout-rumor-region,
+.scout-rumor-position{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:6px 12px;
+  border-radius:12px;
+  font-weight:1000;
+  letter-spacing:.04em;
+}
+.scout-rumor-region{
+  background:#dbeafe;
+  color:#1d4ed8;
+  border:1px solid #60a5fa;
+}
+.scout-rumor-position{
+  background:#fee2e2;
+  color:#b91c1c;
+  border:1px solid #f87171;
+}
+.scout-rumor-plus{
+  font-weight:1000;
+  color:#92400e;
+}
+.scout-rumor-label{
+  font-weight:900;
+  color:#334155;
+  margin-bottom:4px;
+}
+
+
+/* v145: 月替わりマネージャーレポート */
+.monthly-report-card{display:grid;gap:14px;}
+.monthly-report-head{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:start;}
+.monthly-report-head img{width:64px;height:64px;border-radius:16px;object-fit:cover;border:2px solid #bfdbfe;}
+.monthly-report-head h3{margin:0 0 6px;font-size:1.1rem;}
+.monthly-report-section{border:1px solid #dbeafe;background:#f8fbff;border-radius:16px;padding:12px;display:grid;gap:8px;}
+.monthly-report-section h4{margin:0;color:#1e3a8a;}
+.monthly-growth-row,.monthly-match-row{display:grid;gap:4px;padding:8px 10px;border-radius:12px;background:#fff;border:1px solid #e5e7eb;}
+.monthly-growth-row span,.monthly-match-row span{color:#475569;font-weight:800;line-height:1.45;}
+.monthly-chip{display:inline-flex;margin:2px 6px 2px 0;padding:7px 10px;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-weight:900;}
+.monthly-empty{color:#64748b;font-weight:850;line-height:1.5;}
+
+/* v145: 監督行動カード化 */
+.monthly-choice-grid,.coach-action-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
+}
+.monthly-choice-card,.coach-action-card{
+  border:1px solid #dbeafe;
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+  border-radius:16px;
+  padding:12px;
+  cursor:pointer;
+  display:grid;
+  gap:4px;
+  text-align:left;
+  box-shadow:0 8px 18px rgba(30,64,175,.08);
+}
+.monthly-choice-card:hover,.coach-action-card:hover{
+  border-color:#60a5fa;
+  transform:translateY(-1px);
+}
+.monthly-choice-card .choice-illust,.coach-action-card span{
+  font-size:1.65rem;
+  line-height:1;
+}
+.monthly-choice-card strong,.coach-action-card strong{
+  font-size:.98rem;
+  color:#172554;
+}
+.monthly-choice-card small,.coach-action-card small{
+  color:#64748b;
+  font-weight:800;
+  line-height:1.35;
+}
+.coach-action-card.active{
+  border-color:#f59e0b;
+  background:#fff7ed;
+  outline:2px solid rgba(245,158,11,.24);
+}
+
+
+/* v146: 月替わりおすすめコメント */
+.monthly-recommend-section{
+  border-color:#f59e0b;
+  background:linear-gradient(180deg,#fff7ed,#ffffff);
+}
+.monthly-recommend{
+  padding:10px 12px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #fed7aa;
+  color:#7c2d12;
+  font-weight:950;
+  line-height:1.6;
+}
+
+
+/* v147: 試合分析レポート */
+.match-analysis-report{
+  display:grid;
+  gap:10px;
+  margin-top:8px;
+}
+.match-analysis-team{
+  border:1px solid #dbeafe;
+  background:#f8fbff;
+  border-radius:14px;
+  padding:10px;
+}
+.match-analysis-team h5{
+  margin:0 0 8px;
+  color:#1e3a8a;
+  font-size:.95rem;
+}
+.match-analysis-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px;
+}
+.match-analysis-grid div{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:8px;
+  display:grid;
+  gap:3px;
+}
+.match-analysis-grid span{
+  font-size:.78rem;
+  color:#64748b;
+  font-weight:900;
+}
+.match-analysis-grid strong{
+  color:#0f172a;
+  font-size:1.05rem;
+}
+.match-analysis-grid small{
+  color:#64748b;
+  font-weight:800;
+}
+
+
+/* v148: イベント省略モード */
+.event-skip-setting-card{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid #dbeafe;
+  border-radius:16px;
+  background:#f8fbff;
+}
+.event-skip-setting-card strong{
+  color:#1e3a8a;
+}
+.event-skip-setting-card p{
+  margin:4px 0 0;
+}
+@media (max-width:640px){
+  .event-skip-setting-card{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* v149: 監督ステータス・分析力 */
+.coach-status-card{
+  border:1px solid #dbeafe;
+  background:linear-gradient(180deg,#f8fbff,#ffffff);
+  border-radius:16px;
+  padding:12px;
+  display:grid;
+  gap:10px;
+}
+.coach-status-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.coach-status-head h3{
+  margin:0;
+  color:#1e3a8a;
+  font-size:1rem;
+}
+.coach-stat-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+}
+.coach-stat-row strong{
+  color:#172554;
+}
+.coach-stat-row p{
+  margin:3px 0 0;
+  color:#64748b;
+  font-weight:800;
+  line-height:1.4;
+}
+.coach-stat-level{
+  font-weight:1000;
+  color:#92400e;
+  background:#fef3c7;
+  border:1px solid #fbbf24;
+  border-radius:999px;
+  padding:6px 10px;
+}
+.coach-stat-bar{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+}
+.coach-stat-bar span{
+  display:block;
+  height:100%;
+  background:#60a5fa;
+  border-radius:999px;
+}
+
+
+/* v150: 監督ステータス複数項目 */
+.coach-stat-list{
+  display:grid;
+  gap:10px;
+}
+.coach-stat-row.multi{
+  grid-template-columns:1fr auto;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:10px;
+  background:#fff;
+}
+.coach-stat-row.multi .coach-stat-bar{
+  grid-column:1 / -1;
+}
+.coach-stat-row small{
+  display:block;
+  margin-top:4px;
+  color:#475569;
+  font-weight:900;
+}
+
+.absent-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:2px 7px;
+  border-radius:999px;
+  background:#fee2e2;
+  color:#991b1b;
+  font-weight:900;
+  border:1px solid #fecaca;
+}
+
+/* v153: 選択必須イベント */
+#growthModalClose.hidden{
+  display:none !important;
+}
+
+/* v157: 月間レポートカテゴリボタン・カード選択UI */
+.monthly-report-buttons{
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:10px;
+  background:#f8fafc;
+}
+.monthly-report-title{
+  font-weight:900;
+  margin-bottom:8px;
+}
+.action-row.wrap{
+  flex-wrap:wrap;
+}
+.card-pick-modal{
+  max-height:70vh;
+  overflow:auto;
+}
+.player-pick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px;
+}
+.player-pick-card{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  text-align:left;
+  width:100%;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:#fff;
+  padding:10px;
+  cursor:pointer;
+}
+.player-pick-card:hover,.training-pick-card:hover{
+  border-color:#94a3b8;
+  transform:translateY(-1px);
+}
+.player-pick-card.selected,.training-pick-card.selected{
+  border-color:#ef4444;
+  box-shadow:0 0 0 2px rgba(239,68,68,.15);
+  background:#fff7f7;
+}
+.player-pick-card.disabled{
+  opacity:.45;
+}
+.player-pick-card img{
+  width:48px;
+  height:48px;
+  border-radius:12px;
+  object-fit:cover;
+  flex:0 0 auto;
+}
+.player-mini-abilities{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:6px;
+}
+.player-mini-abilities span{
+  font-size:11px;
+  font-weight:900;
+  background:#f1f5f9;
+  border-radius:999px;
+  padding:2px 6px;
+}
+.training-pick-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:8px;
+}
+.training-pick-card{
+  text-align:left;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:#fff;
+  padding:10px;
+  cursor:pointer;
+}
+.training-pick-card strong{
+  display:block;
+  margin-bottom:4px;
+}
+.training-pick-card small{
+  color:#475569;
+  font-weight:800;
+  line-height:1.45;
+}
+
+
+/* 2026-07-27: 試合前メンバー画面のリベロを通常カード化し、3行目中央へ配置 */
+#preMatchLineups .match-lineup-grid .lineup-libero-card {
+  grid-column: 2 !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-style: solid !important;
+  background: #fff !important;
+}
+#preMatchLineups .lineup-libero-card .lineup-face {
+  display: block;
+}
+
+/* ================================================================
+   v88: デザイントークン（段階導入）
+   既存のCSSは残したまま、新規・改修部分からこの変数を使う。
+   色12 / 文字6段階 / 角丸4段階 / 余白8pxの倍数 に集約していく。
+   ================================================================ */
+:root{
+  --c-bg:#f6f8fb; --c-surface:#ffffff; --c-line:#e3e9f2; --c-line-strong:#cbd6e6;
+  --c-text:#0f1f38; --c-sub:#5b6b85; --c-mute:#93a1b8;
+  --c-primary:#1d4ed8; --c-primary-soft:#e8efff;
+  --c-accent:#e11d48; --c-warn:#f59e0b; --c-ok:#15803d;
+  --fs-xs:11px; --fs-sm:12px; --fs-md:14px; --fs-lg:16px; --fs-xl:20px; --fs-2xl:26px;
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-full:999px;
+  --sp:8px;
+}
+
+/* v88: 月初の行動選択カード */
+.monthly-choice-card{position:relative;display:flex;flex-direction:column;gap:5px;text-align:left}
+.monthly-choice-card small{line-height:1.45}
+.monthly-choice-card .choice-lock{font-size:10px;color:var(--c-accent);font-weight:700}
+.monthly-choice-card.is-locked{opacity:.55;cursor:not-allowed}
+
+/* v88: マネージャーの助言（行動選択モーダル内） */
+#monthlyActionMessage .advice-line{display:block;font-size:var(--fs-sm);color:var(--c-sub);line-height:1.6}
+#monthlyActionMessage .advice-line + .advice-line{margin-top:2px}
+
+/* v88: 常時表示のステータスバー（今どこにいて、次に何が来るか） */
+.status-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-lg);
+  padding:10px 14px;margin:0 0 10px}
+.status-bar .sb-left b{font-size:var(--fs-xl);margin-right:6px}
+.status-bar .sb-left span{color:var(--c-sub);font-size:var(--fs-sm)}
+.status-bar .sb-timeline{flex:1;min-width:260px;display:flex;gap:5px}
+.status-bar .sb-tp{flex:1;text-align:center;font-size:10px;line-height:1.3;padding:5px 2px;
+  border-radius:var(--r-sm);background:#f1f5fb;color:var(--c-mute);border:1px solid var(--c-line)}
+.status-bar .sb-tp.done{background:#eef7ee;color:var(--c-ok);border-color:#cfe8cf}
+.status-bar .sb-tp.now{background:var(--c-accent);color:#fff;border-color:var(--c-accent);font-weight:700}
+.status-bar .sb-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.status-bar .sb-chip{font-size:var(--fs-xs);background:#f1f5fb;border:1px solid var(--c-line);
+  border-radius:var(--r-full);padding:4px 10px;color:var(--c-sub)}
+.status-bar .sb-chip.ok{background:#eef7ee;border-color:#cfe8cf;color:var(--c-ok);font-weight:700}
+.status-bar .sb-chip.todo{background:#fff7ed;border-color:#fed7aa;color:#c2410c;font-weight:700}
+@media (max-width:560px){
+  .status-bar{gap:8px;padding:8px 10px}
+  .status-bar .sb-timeline{order:3;width:100%;min-width:0}
+}
+
+/* v90: チーム評価レーダーの「今季の伸び」表示 */
+.team-radar-row .season-growth{
+  display:inline-block;margin-left:6px;font-size:var(--fs-xs);font-weight:800;
+  border-radius:var(--r-full);padding:0 7px;vertical-align:middle}
+.team-radar-row .season-growth.up{background:#dcfce7;color:var(--c-ok)}
+.team-radar-row .season-growth.down{background:#ffe4e6;color:var(--c-accent)}
+.team-radar-row .season-growth.flat{background:#f1f5fb;color:var(--c-mute)}
+.season-growth-foot{margin-top:6px;font-size:var(--fs-xs);color:var(--c-mute);text-align:right}
+
+/* v90: 見出し横のヘルプボタン */
+.help-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;margin-left:7px;vertical-align:middle;
+  border:1px solid var(--c-line-strong);border-radius:50%;
+  background:#fff;color:var(--c-sub);font-size:12px;font-weight:700;
+  line-height:1;cursor:pointer;padding:0;font-family:inherit}
+.help-btn:hover{border-color:var(--c-primary);color:var(--c-primary);background:var(--c-primary-soft)}
+.growth-item.help-line{font-weight:600;line-height:1.7}
+
+/* ================================================================
+   v91: モーダル統合レイヤー
+   10種のモーダルを「情報 / 選択 / 結果」の3型に揃える。
+   重なり順は --z-modal スケールで一元管理し、!important を使わない。
+   （以前は 9998〜22001 の値が !important つきで積み上がっていた）
+   ================================================================ */
+:root{
+  --z-modal-base:9000;   /* 通常のモーダル */
+  --z-modal-over:9100;   /* 別のモーダルの上に開くもの */
+  --z-modal-top:9200;    /* さらにその上（詳細・選考） */
+}
+.modal{
+  position:fixed;inset:0;z-index:9000;
+  display:none;align-items:center;justify-content:center;padding:12px}
+.modal:not(.hidden){display:flex}
+/* inline style で display:flex が残っていても、hidden が付いていれば必ず隠す */
+.modal.hidden{display:none !important}
+.modal-backdrop{position:absolute;inset:0;background:rgba(15,23,42,.45)}
+.modal-card{
+  position:relative;z-index:1;
+  width:min(560px,calc(100vw - 24px));
+  max-height:calc(100vh - 24px);overflow:auto;
+  background:var(--c-surface);border-radius:var(--r-lg);
+  box-shadow:0 24px 60px rgba(15,31,56,.28);padding:18px}
+/* 重なり順（DOM順ではなく用途で決める）
+   9000=通常 / 9100=別のモーダルの上に開くもの / 9200=さらにその上
+   ※ 変数ではなく実値で書く。z-index は環境差が出にくい形にしておく。 */
+#monthlyActionModal,#scoutMapModal,#directorVisitModal,#individualTrainingModal{z-index:9100}
+#scoutDetailModal,#aprilRecruitModal{z-index:9200}
+
+/* --- 共通ヘッダ：種類バッジ＋タイトル＋進捗 --- */
+.modal-title-row{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--c-line)}
+.modal-title-row h2{margin:0;font-size:var(--fs-lg);flex:1}
+.modal-kind{
+  font-size:var(--fs-xs);font-weight:700;padding:3px 9px;border-radius:var(--r-full);
+  color:#fff;letter-spacing:.04em;flex:none}
+.modal-kind.kind-info{background:var(--c-primary)}
+.modal-kind.kind-choice{background:var(--c-warn)}
+.modal-kind.kind-result{background:var(--c-accent)}
+.modal-step{font-size:var(--fs-xs);color:var(--c-mute);flex:none}
+
+/* --- 共通フッタ：主要ボタンは右 --- */
+.modal-bottom-actions{
+  display:flex;gap:10px;justify-content:flex-end;align-items:center;
+  padding-top:12px;margin-top:14px;border-top:1px solid var(--c-line)}
+.modal-bottom-actions button{min-width:96px}
+
+/* 幅だけ各モーダルで上書きする（型は共通） */
+.scout-detail-card{width:min(920px,calc(100vw - 24px))}
+.april-recruit-card{width:min(960px,calc(100vw - 24px))}
+.scout-map-card{width:min(760px,calc(100vw - 24px))}
+.monthly-action-card{width:min(620px,calc(100vw - 24px))}
+.intro-flow-card{width:min(620px,calc(100vw - 24px))}
+
+@media (max-width:560px){
+  .modal{padding:8px}
+  .modal-card{padding:14px;border-radius:var(--r-md)}
+  .modal-title-row h2{font-size:var(--fs-md)}
+}
+
+/* v91: タイトル行を持たないモーダルでも、バッジが見出しの前に自然に並ぶように */
+.modal-card > h2 > .modal-kind,
+.manager-choice-head .modal-kind{display:inline-block;margin-right:8px;vertical-align:middle}
+.manager-choice-head .modal-kind{margin-bottom:4px}
+
+/* v92: 月替わりモーダル */
+.month-transition-card{width:min(520px,calc(100vw - 24px))}
+.month-transition-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.month-transition-actions button{width:100%;padding:14px 10px;font-weight:700}
+.month-transition-summary{
+  background:#f1f5fb;border:1px solid var(--c-line);border-radius:var(--r-md);
+  padding:10px 12px;font-size:var(--fs-sm);color:var(--c-sub);font-weight:700}
+.month-growth-card{width:min(880px,calc(100vw - 24px))}
+@media (max-width:560px){.month-transition-actions{grid-template-columns:1fr}}
+
+/* v93: レーダー図に今季の基準（4月第1週終了時）を点線で重ねる */
+.team-radar-base{fill:rgba(148,163,184,.16);stroke:#94a3b8;stroke-width:1.4;stroke-dasharray:4 3}
+/* v93: 試合画面の顔グラを大きく */
+#preMatchLineups .lineup-face,
+#substitutionPanel .lineup-face{width:76px;height:76px;border-radius:var(--r-md);object-fit:cover}
+#substitutionPanel .sub-candidate-card{gap:12px;align-items:flex-start}
+#substitutionPanel .player-mini-abilities{margin-top:4px}
+@media (max-width:560px){
+  #preMatchLineups .lineup-face,#substitutionPanel .lineup-face{width:58px;height:58px}
+}
+
+/* v95: 殿堂タブ */
+.hall-heading{font-size:var(--fs-lg);margin:16px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--c-line)}
+.hall-role-group{margin-bottom:14px}
+.hall-role-label{font-size:var(--fs-xs);font-weight:800;color:var(--c-sub);
+  background:#f1f5fb;border-radius:var(--r-full);padding:2px 12px;display:inline-block;margin-bottom:6px}
+.hall-grid{display:grid;gap:4px}
+.hall-card{display:flex;gap:12px;align-items:flex-start;background:var(--c-surface);
+  border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 12px;margin-bottom:6px}
+.hall-face{width:84px;height:84px;border-radius:var(--r-md);object-fit:cover;flex:none;background:#eef2f8}
+.hall-body{flex:1;min-width:0}
+.hall-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hall-name-row strong{font-size:var(--fs-lg)}
+.hall-pos{font-size:var(--fs-xs);background:#f1f5fb;border:1px solid var(--c-line);
+  border-radius:var(--r-full);padding:1px 9px;color:var(--c-sub);font-weight:700}
+.hall-grade{font-size:var(--fs-lg);font-weight:900}
+.hall-meta{font-size:var(--fs-xs);color:var(--c-sub);margin:2px 0 4px}
+.hall-specials{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.hall-pro-list{display:grid;gap:6px}
+.hall-pro-row{display:flex;align-items:center;gap:12px;background:#fff7ed;
+  border:1px solid #fed7aa;border-radius:var(--r-md);padding:8px 12px}
+.hall-pro-face{width:52px;height:52px;border-radius:var(--r-full);object-fit:cover;flex:none;background:#eef2f8}
+.hall-pro-row strong{font-size:var(--fs-md);margin-right:8px}
+.hall-pro-badge{margin-left:auto;font-size:var(--fs-xs);font-weight:800;color:#fff;
+  background:var(--c-accent);border-radius:var(--r-full);padding:3px 12px;flex:none}
+@media (max-width:560px){
+  .hall-face{width:64px;height:64px}
+  .hall-card{padding:8px 10px;gap:9px}
+}
+
+
+/* v100: 新入部員選考UI（チェックボックスから「合格」バッジ切替へ） */
+.april-recruit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.april-recruit-pick{position:relative;display:flex;gap:10px;align-items:center;padding:10px 12px;border:2px solid rgba(120,130,150,.35);border-radius:14px;background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .15s,background .15s,transform .1s,box-shadow .15s;filter:grayscale(.55);opacity:.72;}
+.april-recruit-pick:hover{transform:translateY(-1px);border-color:rgba(120,150,220,.6);}
+.april-recruit-pick.is-selected{filter:none;opacity:1;border-color:#e0483c;background:rgba(224,72,60,.10);box-shadow:0 2px 10px rgba(224,72,60,.18);}
+.april-recruit-pick.is-locked{cursor:default;}
+.april-recruit-pick.is-locked:hover{transform:none;}
+.april-recruit-face{width:66px;height:66px;border-radius:50%;object-fit:cover;flex:0 0 auto;}
+.april-recruit-body{min-width:0;flex:1 1 auto;}
+.april-recruit-name{font-size:15px;line-height:1.3;}
+.april-recruit-pick .meta{font-size:12px;opacity:.85;line-height:1.45;}
+.april-recruit-stamp{position:absolute;top:6px;right:8px;padding:2px 10px;border:2px solid currentColor;border-radius:6px;font-weight:800;font-size:12px;letter-spacing:.12em;color:#9aa3b2;transform:rotate(-8deg);opacity:.35;pointer-events:none;}
+.april-recruit-pick.is-selected .april-recruit-stamp{color:#e0483c;opacity:1;}
+.april-over{color:#e0483c;}
+@media (max-width:640px){
+  .april-recruit-list{grid-template-columns:1fr;}
+  .april-recruit-face{width:56px;height:56px;}
+}
+
+/* v101: 練習詳細の進捗バー（数値は出さない） */
+.mini-xp-bar{display:inline-block;vertical-align:middle;width:74px;height:6px;margin-left:6px;border-radius:3px;overflow:hidden;background:rgba(140,150,170,.25);}
+.mini-xp-bar>span{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#5aa9e6,#7fd1b9);}
+
+/* v101: 物語形式のイベント（1枚ずつ送る） */
+.story-seq{padding:6px 2px 2px;}
+.story-text{font-size:16px;line-height:1.95;letter-spacing:.02em;min-height:5.6em;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 10px;}
+.story-text strong{font-size:17px;}
+/* v186: 本文は1枚で包む。包まないと <strong> や .hint が別々のフレックス項目になり横に並ぶ。
+   flex-direction:column は保険。包み忘れても縦に積むだけで、横3列には割れない。 */
+.story-text-inner{width:100%;}
+.story-fade{animation:storyFade .28s ease-out;}
+@keyframes storyFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.story-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px;padding-top:8px;border-top:1px solid rgba(140,150,170,.2);}
+.story-progress{font-size:12px;opacity:.6;letter-spacing:.08em;}
+.story-next{min-width:96px;}
+@media (max-width:640px){
+  .story-text{font-size:15px;line-height:1.85;min-height:6.2em;}
+}
+
+/* v104: 成長報告（左に顔グラ・学年・名前／右に成長） */
+.month-growth-player-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;}
+.month-growth-player-card{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;align-items:start;
+  padding:10px 12px;border:1px solid rgba(140,150,170,.28);border-radius:14px;background:rgba(255,255,255,.04);}
+.month-growth-change-list{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.month-growth-change{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;}
+.month-growth-change span{opacity:.85;}
+.month-growth-change strong{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;}
+.month-growth-change .rank-chip{transform:scale(.86);}
+@media (max-width:640px){
+  .month-growth-player-list{grid-template-columns:1fr;}
+  .month-growth-player-card{grid-template-columns:88px minmax(0,1fr);gap:8px;}
+}
+
+/* v104: 個別練習の選手選択などの評価表示 */
+.player-mini-eval{font-size:12px;font-weight:900;margin-top:6px;}
+
+/* v104: 試合結果のスコア表示 */
+.match-result-score{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 10px;}
+.match-result-score .mrs-team{display:flex;align-items:center;gap:8px;}
+.match-result-score .mrs-name{font-weight:900;font-size:14px;opacity:.85;}
+.match-result-score .mrs-num{font-size:44px;line-height:1;font-weight:1000;letter-spacing:.02em;}
+.match-result-score .mrs-team.is-win .mrs-num{color:#e0483c;}
+.match-result-score .mrs-team.is-win .mrs-name{opacity:1;}
+.match-result-score .mrs-sep{font-size:26px;opacity:.5;}
+.match-result-verdict{text-align:center;font-weight:1000;font-size:18px;letter-spacing:.2em;}
+.match-result-verdict.win{color:#e0483c;}
+.match-result-verdict.lose{opacity:.65;}
+
+/* v115: 個別練習の選手選択カード。能力表示（縦2行）が枠からはみ出していたのを修正。
+   flex の子要素が縮まずに幅を押し広げていたため、min-width:0 と overflow の制御を入れる。 */
+.player-pick-card{align-items:stretch;overflow:hidden;}
+.player-pick-card>div{min-width:0;flex:1 1 auto;overflow:hidden;}
+.player-pick-card .starter-mini-grades{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:6px 0 0;}
+.player-pick-card .starter-mini-grade-item{min-width:0;padding:2px 3px;min-height:0;}
+.player-pick-card .starter-mini-label{min-width:0;min-height:0;font-size:10px;}
+.player-pick-card .starter-mini-grade-item strong{font-size:11px;}
+.player-pick-card .player-mini-eval{font-size:11px;margin-top:4px;}
+.player-pick-card .meta{font-size:11px;}
+.training-pick-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr));}
+@media (max-width:640px){
+  .training-pick-grid{grid-template-columns:1fr;}
+}
+
+/* v116: 成長報告は1行に1人。項目名と数値は折り返さない。 */
+.month-growth-player-list{grid-template-columns:1fr;}
+.month-growth-player-card{grid-template-columns:140px minmax(0,1fr);}
+.month-growth-change-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 14px;}
+.month-growth-change{display:flex;justify-content:flex-start;align-items:center;gap:8px;white-space:nowrap;}
+.month-growth-change .mgc-label{flex:0 0 auto;opacity:.85;}
+.month-growth-change .mgc-val{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;}
+@media (max-width:640px){
+  .month-growth-player-card{grid-template-columns:78px minmax(0,1fr);}
+  .month-growth-change-list{grid-template-columns:1fr;}
+}
+
+/* v118: タイトル画面のボタンを2つに */
+/* v191: 縦積みだとロゴに重なって見えにくいので、下部のまま横並びにする（Tak指示） */
+.title-buttons{position:absolute;left:0;right:0;bottom:6%;margin-left:auto;margin-right:auto;width:max-content;max-width:calc(100% - 24px);display:flex;flex-direction:row;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center;}
+.title-buttons .title-start-btn{position:static;left:auto;bottom:auto;transform:none;min-width:260px;padding:14px 36px;font-size:1.5rem;}
+.title-buttons .title-start-btn:hover{transform:translateY(-2px);}
+.title-load-btn{background:linear-gradient(180deg,#243b6b,#16244a);border-color:#8fb3ff;color:#e8f0ff;}
+@media (max-width:640px){
+  .title-buttons{gap:10px;}
+  .title-buttons .title-start-btn{min-width:0;padding:10px 16px;font-size:1rem;letter-spacing:.08em;}
+}
+
+/* v124: 成長報告 — 顔グラは左端で枠の高さいっぱい、その横に名前・学年・ポジション、右に上昇内容（縦1列） */
+.month-growth-player-card{grid-template-columns:74px 116px minmax(0,1fr);align-items:stretch;gap:12px;padding:10px 14px;}
+.month-growth-player-card .mg-face{width:74px;height:100%;min-height:74px;border-radius:12px;object-fit:cover;align-self:stretch;}
+.month-growth-player-card .mg-name{display:flex;flex-direction:column;justify-content:center;gap:2px;line-height:1.35;text-align:left;}
+.month-growth-player-card .mg-name strong{font-size:16px;}
+.month-growth-player-card .mg-meta{font-size:12px;opacity:.8;}
+.month-growth-change-list{grid-template-columns:1fr;gap:5px 16px;align-content:center;}
+.month-growth-change{font-size:14px;}
+.month-growth-change .mgc-label{min-width:8.5em;}
+/* 6項目を超えたときだけ2列に */
+.month-growth-change-list.is-many{grid-template-columns:repeat(2,minmax(0,1fr));}
+@media (max-width:640px){
+  .month-growth-player-card{grid-template-columns:56px minmax(0,1fr);grid-template-areas:"face name" "list list";}
+  .month-growth-player-card .mg-face{grid-area:face;width:56px;min-height:56px;}
+  .month-growth-player-card .mg-name{grid-area:name;}
+  .month-growth-change-list{grid-area:list;}
+  .month-growth-change-list.is-many{grid-template-columns:1fr;}
+}
+
+/* v124: 個別練習の選手カード — 顔グラの下の空きも能力表示に使う */
+.player-pick-card{display:grid;grid-template-columns:52px minmax(0,1fr);grid-template-areas:"face info" "abil abil";gap:6px 10px;align-items:start;}
+.player-pick-card img{grid-area:face;width:52px;height:52px;}
+.player-pick-card>div{grid-area:info;}
+.player-pick-card .player-mini-eval,.player-pick-card .starter-mini-grades{grid-area:auto;}
+.player-pick-card>div>.player-mini-eval{margin-top:4px;}
+.player-pick-card .starter-mini-grades{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin:5px 0 0;}
+.player-pick-card .starter-mini-grade-item{flex-direction:column;gap:0;}
+.training-pick-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr));}
+
+/* v124: イベントの本文領域を広げる。OKボタンは下部に固定し、本文と重ならないようにする */
+#growthModal .popup-scroll-body{max-height:min(58vh,560px);overflow-y:auto;padding-right:4px;}
+#growthModal .popup-illustration img{max-height:34vh;object-fit:contain;}
+#growthModal .modal-card{display:flex;flex-direction:column;}
+#growthModalClose{align-self:flex-end;margin-top:10px;}
+.event-tempo-head{align-items:flex-start;}
+.event-narration-text{font-size:15px;line-height:1.8;}
+
+/* v125: イベント画像を元の大きさに戻す（v124で34vhに縮めていた） */
+#growthModal .popup-illustration img{max-height:none;width:100%;height:auto;object-fit:contain;}
+#growthModal .popup-scroll-body{max-height:min(52vh,520px);}
+
+/* v125: 個別練習の選手カード — 顔グラの下も使い、能力は4列×2段にする */
+.player-pick-card{grid-template-columns:56px minmax(0,1fr);grid-template-areas:"face info";column-gap:10px;row-gap:4px;}
+.player-pick-card img{grid-area:face;width:56px;height:56px;align-self:start;}
+.player-pick-card>div{grid-area:info;min-width:0;}
+.player-pick-card .starter-mini-grades{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:5px 0 0;}
+.player-pick-card .starter-mini-grade-item{flex-direction:row;gap:2px;justify-content:center;min-height:0;padding:2px 3px;}
+.player-pick-card .player-mini-eval{margin-top:4px;}
+
+/* v125: 成長報告 — 顔グラの大きさは枠の高さに関係なく固定 */
+.month-growth-player-card{align-items:start;}
+.month-growth-player-card .mg-face{height:74px;min-height:0;align-self:start;}
+
+/* v125: 4月時点からの伸びを目立たせる（チーム画面） */
+.season-growth{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.02em;vertical-align:middle;}
+.season-growth.up{color:#fff;background:linear-gradient(180deg,#f0563f,#d1351f);box-shadow:0 1px 4px rgba(209,53,31,.35);}
+.season-growth.down{color:#fff;background:linear-gradient(180deg,#5b7cc4,#3a5da3);}
+.season-growth.flat{color:#8b95a6;background:rgba(140,150,170,.16);}
+.season-growth-foot{margin-top:6px;font-size:11px;opacity:.7;}
+
+/* v127: スカウトのマップモーダルにも噂一覧を出す＋ホバーは下読みだけ */
+.scout-map-rumor-panel{margin:8px 0;}
+.scout-map-preview{min-height:1.4em;margin:4px 0 6px;font-size:12px;opacity:.75;text-align:center;}
+.region-shape{cursor:pointer;}
+.region-shape:hover{filter:brightness(1.06);outline:2px dashed rgba(120,150,220,.65);outline-offset:2px;}
+.region-shape.selected,.region-shape[aria-pressed="true"]{outline:3px solid #e0483c;outline-offset:2px;}
+
+/* v128: 個別練習の選手カード — 能力表示をカード全幅に置き、顔グラの下のスペースまで使う */
+.player-pick-card{display:grid;grid-template-columns:56px minmax(0,1fr);grid-template-areas:"face info" "abil abil";column-gap:10px;row-gap:6px;align-items:start;}
+.player-pick-card>img{grid-area:face;width:56px;height:56px;align-self:start;}
+.player-pick-card>.ppc-info{grid-area:info;min-width:0;}
+.player-pick-card>.starter-mini-grades{grid-area:abil;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0;width:100%;}
+.player-pick-card .player-mini-eval{display:block;margin-top:4px;font-size:12px;font-weight:900;}
+.player-pick-card .starter-mini-grade-item{flex-direction:row;gap:3px;justify-content:center;align-items:center;min-height:0;padding:3px 4px;}
+
+/* v129: 試合画面の交代候補カードで、顔グラに名前・ポジション・身長が重なる問題の修正。
+   .lineup-face と .lineup-main が grid-row:1 に固定されている一方、
+   .match-lineup-stats は行が auto のため同じ1行目に自動配置され、重なっていた。 */
+.sub-candidate-card{grid-template-rows:auto auto;}
+.sub-candidate-card>.lineup-face{grid-column:1;grid-row:1;}
+.sub-candidate-card>.lineup-main{grid-column:2;grid-row:1;min-width:0;}
+.sub-candidate-card>.match-lineup-stats{grid-column:1 / -1;grid-row:2;margin-top:4px;}
+.sub-candidate-card .starter-mini-grades{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:4px 0 0;}
+.sub-candidate-card .starter-mini-grade-item{flex-direction:row;gap:3px;justify-content:center;min-height:0;padding:3px 4px;}
+
+/* v132: 新入部員選考カード — 非アクティブでグレーにするのは「合格」スタンプと背景だけにする。
+   顔グラや文字までグレースケール＋半透明にしていたので見づらかった。 */
+.april-recruit-pick{filter:none;opacity:1;background:rgba(140,150,170,.10);}
+.april-recruit-pick:hover{background:rgba(140,150,170,.16);}
+.april-recruit-pick.is-selected{filter:none;opacity:1;background:rgba(224,72,60,.10);}
+.april-recruit-pick .april-recruit-face,
+.april-recruit-pick .april-recruit-body{filter:none;opacity:1;}
+
+/* v133: 選手一覧のカードを少しだけ小さくし、左端の線が見切れないようにする。
+   .roster-item.active の outline は要素の外側に描かれるため、スクロール枠に食われていた。
+   内側に描く box-shadow に変え、リスト側にも左の余白を入れる。 */
+.roster-list{padding-left:4px;padding-right:6px;}
+.roster-item{grid-template-columns:56px minmax(0,1fr) auto !important;gap:8px;padding:7px 9px;}
+.roster-item img{width:56px !important;height:56px !important;}
+.roster-item.active{outline:none;box-shadow:inset 0 0 0 2px var(--primary);}
+.roster-item .name{font-size:14px;}
+.roster-item .meta{font-size:11px;}
+
+/* v135: レーダーの差分（4月時点との伸び）を強調する */
+.team-radar-base{fill:none !important;stroke:#94a3b8 !important;stroke-width:1.6 !important;stroke-dasharray:5 4 !important;opacity:.9;}
+
+/* v136: レーダーは「4月時点」と「現在」の重ね塗りで差を見せる（参考画像の方式）。
+   現在＝黄、4月時点＝緑を上から重ねるので、重なった部分は緑、はみ出した黄が伸び。 */
+.team-radar-polygon{fill:rgba(250,204,21,.92) !important;stroke:#eab308 !important;stroke-width:2 !important;}
+.team-radar-base{fill:rgba(134,239,205,.92) !important;stroke:#34d399 !important;stroke-width:2 !important;stroke-dasharray:none !important;opacity:1 !important;}
+.team-radar-legend .lg-dot.base{fill:#34d399;}
+.team-radar-legend .lg-dot.now{fill:#facc15;}
+.team-radar-legend .lg-text{font-size:11px;font-weight:800;fill:#475569;dominant-baseline:middle;}
+
+/* v137: レーダーの配色をゲーム全体のブルー基調に合わせて作り直し。
+   現在＝ブランドブルーの面、4月時点＝ほぼ白に近い淡色の面を上に重ねる。
+   はみ出して残ったブルーの帯が「4月からの伸び」。黄×緑の派手な組み合わせは廃止。 */
+.team-radar-polygon{fill:url(#radarNowGrad) !important;stroke:#2f6fe4 !important;stroke-width:2 !important;fill-opacity:1 !important;}
+.team-radar-base{fill:url(#radarBaseGrad) !important;stroke:#a8c4e8 !important;stroke-width:1.4 !important;stroke-dasharray:none !important;fill-opacity:.94 !important;opacity:1 !important;}
+.team-radar-ring{stroke:#dbe7f7 !important;}
+.team-radar-axis{stroke:#dbe7f7 !important;}
+.team-radar-legend .lg-dot.base{fill:#eaf1fb;stroke:#a8c4e8;stroke-width:1.4;}
+.team-radar-legend .lg-dot.now{fill:#3a7dff;stroke:none;}
+.team-radar-legend .lg-text{font-size:11px;font-weight:700;fill:#5d7395;dominant-baseline:middle;}
+
+/* v138: 試合画面の交代候補カードで顔グラに名前・ポジション・身長が重なる問題の本当の原因。
+   v129では行の重なりを直したが、実際は列幅の不一致だった。
+   .sub-candidate-card の1列目は 56px 固定なのに、#substitutionPanel 内の .lineup-face は
+   76px（狭幅時58px）に拡大されており、はみ出した20px分が2列目のテキストに重なっていた。
+   1列目を画像の実寸に追従させる。 */
+#substitutionPanel .sub-candidate-card{grid-template-columns:76px minmax(0,1fr);align-items:start;}
+#substitutionPanel .sub-candidate-card>.lineup-face{width:76px;height:76px;justify-self:start;}
+#substitutionPanel .sub-candidate-card>.lineup-main{min-width:0;overflow-wrap:anywhere;}
+@media (max-width:560px){
+  #substitutionPanel .sub-candidate-card{grid-template-columns:58px minmax(0,1fr);}
+  #substitutionPanel .sub-candidate-card>.lineup-face{width:58px;height:58px;}
+}
+/* v138: 試合中指示は配球①②＋ブロックの3項目になったので折り返せるようにする */
+#matchTacticsPanel .sub-row{flex-wrap:wrap;}
+#matchTacticsPanel .sub-row>label{min-width:180px;flex:1 1 180px;}
+
+/* v140: 月替わりモーダルの月イラストと、条件つきのお知らせ */
+.month-transition-hero{
+  display:block;width:100%;height:auto;border-radius:12px;
+  margin:0 0 12px;object-fit:cover;
+}
+.month-transition-notice{
+  margin:10px 0 0;padding:10px 12px;border-radius:10px;
+  font-size:.95rem;font-weight:700;line-height:1.6;
+}
+.month-transition-notice.tournament{background:#fff4e6;color:#8a4b08;border:1px solid #ffd8a8;}
+.month-transition-notice.scout{background:#eaf1fb;color:#1a4a8f;border:1px solid #bcd4f2;}
+.month-transition-notice strong{font-weight:900;}
+
+/* v149: 殿堂の歴代OGドリームチーム。OH/OH/MB/MB/OP/S/L の並びでスタメンと控えを並べる。 */
+.hall-lineup-group{margin:0 0 18px}
+.hall-lineup-label{display:inline-block;font-size:.82rem;font-weight:900;letter-spacing:.04em;
+  border-radius:999px;padding:3px 14px;margin-bottom:8px}
+.hall-lineup-group.is-starters .hall-lineup-label{background:#e8f0ff;color:#1a4a8f;border:1px solid #bcd4f2}
+.hall-lineup-group.is-reserves .hall-lineup-label{background:#f1f5fb;color:#5d7395;border:1px solid #dbe7f7}
+.hall-lineup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:8px}
+.hall-lineup-grid .hall-card{position:relative;margin-bottom:0;padding-top:26px}
+.hall-slot-badge{position:absolute;top:0;left:0;font-size:.74rem;font-weight:900;color:#fff;
+  background:#3a7dff;border-radius:var(--r-md) 0 var(--r-md) 0;padding:2px 12px;letter-spacing:.06em}
+.hall-lineup-group.is-reserves .hall-slot-badge{background:#94a3b8}
+.hall-card.is-empty{display:flex;align-items:center;justify-content:center;min-height:104px;
+  background:#f8fafc;border-style:dashed;color:var(--c-sub)}
+.hall-empty-body{font-size:var(--fs-xs)}
+.hall-pos-orig{background:#fff7ed;border-color:#fed7aa;color:#8a4b08}
+@media (max-width:560px){
+  .hall-lineup-grid{grid-template-columns:1fr}
+}
+
+/* v150: スパイクフォーム改造の対象選択カード（顔グラ付き・選ぶと即実行） */
+.form-change-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:8px 0}
+.form-change-pick{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center;
+  text-align:left;width:100%;background:#fff;border:1px solid var(--c-line);border-radius:12px;
+  padding:8px 10px;cursor:pointer}
+.form-change-pick:hover{border-color:var(--primary);box-shadow:0 0 0 2px rgba(58,125,255,.16)}
+.form-change-face{width:64px;height:64px;border-radius:12px;object-fit:cover;border:2px solid #dbeafe;background:#fff}
+.form-change-info{min-width:0}
+.form-change-info strong{font-size:1rem}
+.form-change-stats{font-size:.8rem;margin-top:3px}
+@media (max-width:560px){ .form-change-grid{grid-template-columns:1fr} }
+
+/* v161: 元気度のUI。バーは満タンから減り、緑→黄→橙→赤に変わる。 */
+.genki-row{display:flex;align-items:center;gap:8px;margin:5px 0}
+.genki-bar{flex:1;min-width:60px;height:9px;border-radius:999px;background:#e8eef7;overflow:hidden}
+.genki-bar-fill{height:100%;border-radius:999px;transition:width .2s}
+.genki-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;
+  padding:3px 9px;border-radius:999px;white-space:nowrap;flex:none}
+.genki-face{flex:none;display:block}
+.genki-badge.genki-fresh{background:#dcfce7;color:#14532d;border:1px solid #86efac}
+.genki-badge.genki-light{background:#fef9c3;color:#713f12;border:1px solid #fde047}
+.genki-badge.genki-mid{background:#ffedd5;color:#7c2d12;border:1px solid #fdba74}
+.genki-badge.genki-rest{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
+.detail-genki{max-width:280px}
+.dev-squad-badge{display:inline-block;font-size:.72rem;font-weight:800;padding:1px 8px;border-radius:999px;
+  background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
+/* 試合画面のスタメンカード右上 */
+.lineup-genki{position:absolute;top:4px;right:4px;z-index:1}
+.lineup-item,.starter-card,.opponent-ability-card{position:relative}
+.lineup-genki .genki-badge{font-size:10px;padding:2px 7px}
+
+/* v161: 月替わりモーダルの育成組パネル */
+.dev-squad-panel{margin-top:12px;padding:12px;border-radius:12px;background:#f6faff;border:1px solid #d5e5ff;text-align:left}
+.dev-squad-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.dev-squad-panel .sub-select{width:100%;margin-top:8px}
+.dev-squad-names{margin-top:6px;font-size:.8rem;color:var(--c-sub)}
+
+/* v162: チーム画面のカードに出す元気度アイコン（アイコンのみ） */
+.genki-icon-only{display:inline-flex;align-items:center;vertical-align:-3px;margin-left:5px}
+.starter-reserve-card.empty,.starter-bench-card.empty{opacity:.55;justify-content:center;align-items:center;min-height:72px}
+.starter-bench-card.empty .bench-select{margin-top:8px;width:100%}
+
+/* v163: 月替わりモーダルの1軍・2軍の練習方針 */
+.squad-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 4px}
+.squad-plan-col{background:#fff;border:1px solid #d5e5ff;border-radius:10px;padding:8px 10px}
+.squad-plan-label{font-size:.85rem;font-weight:800;margin-bottom:6px}
+.squad-plan-col .sub-select{width:100%}
+.squad-plan-col .meta{margin-top:5px;font-size:.75rem;line-height:1.5}
+@media (max-width:560px){ .squad-plan-grid{grid-template-columns:1fr} }
+
+/* v169: 試合画面の元気度を顔グラの下へ。スタメンも交代候補も同じ形にする（バーは使わない）。 */
+.lineup-face-col{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.lineup-genki-under{display:flex;justify-content:center}
+.lineup-genki-under .genki-badge{font-size:10px;padding:2px 7px}
+.sub-candidate-card>.lineup-face-col{grid-column:1;grid-row:1}
+#substitutionPanel .sub-candidate-card>.lineup-face-col{justify-self:start}
+/* 顔グラを76pxに拡大している画面では、1列目の幅も実寸に追従させる（v138のsub-candidate-cardと同じ対処） */
+#preMatchLineups .match-lineup-card{grid-template-columns:76px minmax(0,1fr)}
+@media (max-width:560px){
+  #preMatchLineups .match-lineup-card{grid-template-columns:58px minmax(0,1fr)}
+}
+
+/* v169: スタメンプリセット */
+.lineup-preset-section{margin:0 0 14px}
+.lineup-preset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lineup-preset-card{display:flex;flex-direction:column;gap:8px;border:1px solid var(--c-line);border-radius:var(--r-md);
+  background:#fff;padding:10px 12px}
+.lineup-preset-card.empty{background:#f8fafc;border-style:dashed}
+.lineup-preset-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.lineup-preset-head strong{font-size:.95rem}
+.lineup-preset-head .muted{font-size:.72rem}
+.lineup-preset-body{flex:1;font-size:.8rem}
+.lineup-preset-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.lineup-preset-chip{display:flex;flex-direction:column;gap:1px;background:#f1f5fb;border:1px solid var(--c-line);
+  border-radius:var(--r-sm);padding:3px 5px;font-size:.72rem;font-weight:700;overflow-wrap:anywhere}
+.lineup-preset-chip em{font-style:normal;font-size:.62rem;color:var(--c-sub);font-weight:800}
+.lineup-preset-sub{margin-top:6px;font-size:.75rem;color:var(--c-sub);font-weight:700}
+.lineup-preset-actions{display:flex;flex-wrap:wrap;gap:6px}
+.lineup-preset-actions button{flex:1 1 auto}
+@media (max-width:760px){ .lineup-preset-grid{grid-template-columns:1fr} }
+/* v172: チーム概要の下では縦型（1列）に並べる */
+#lineupPresetPanel .lineup-preset-section{margin:0}
+#lineupPresetPanel .lineup-preset-grid{grid-template-columns:1fr}
+#lineupPresetPanel .lineup-preset-actions button{flex:1 1 30%}
+
+
+/* v172: 月替わりモーダル＝上に画像、下に各内容を横並び（Tak指示） */
+.month-transition-card{width:min(880px,calc(100vw - 24px))}
+/* v173: 月画像は 2:1（1280x640）に統一。カード内側844pxに対して高さ422pxで原寸表示になる。
+   画面が低いときは max-height が効いて縦だけ縮み、object-fit:cover が上下を切って
+   モーダル全体が1枚に収まる。中身（画像以外）は実測436px＋余白48px＝484px。 */
+/* v184: 月の画像が 1280x640（2:1）から 1280x320（4:1）の横長になったので、
+   比率と高さの上限をそろえた（Tak指示）。2:1のままだと左右が大きく切られ、
+   端にいる選手が画面から消える。 */
+.month-transition-card .month-transition-hero{
+  width:100%;
+  aspect-ratio:4/1;
+  /* 高さの確保量（520px）は旧版と同じにしてある。ここを緩めると
+     縦の短い画面でカードがはみ出してスクロールが出る（実測）。 */
+  max-height:min(240px, calc(100vh - 520px));
+  min-height:96px;
+  object-fit:cover;
+  object-position:center;
+}
+.month-transition-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:10px}
+.month-transition-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.month-transition-body .month-transition-actions{grid-template-columns:1fr;margin:0}
+.month-transition-body .month-transition-summary{margin:0}
+.month-transition-body .month-transition-notice{margin:0}
+.month-transition-body .dev-squad-panel{margin-top:0}
+.month-transition-body .squad-plan-grid{grid-template-columns:1fr}
+@media (max-width:760px){
+  .month-transition-body{grid-template-columns:1fr}
+  .month-transition-card .month-transition-hero{max-height:min(150px, calc(100vh - 520px))}
+}
+
+/* v172: 「結果を見る」の先頭に出す概要（Tak指示） */
+.event-detail-line.event-result-summary{
+  background:#eef6ff;border-color:#bfdbfe;color:#17305a;font-weight:800;
+}
+
+/* ============================================================
+   v174: 体験版の終了画面
+   ============================================================ */
+/* 他のモーダルより必ず前面に出す。閉じるボタンは無く、この記録では進めない。 */
+#demoEndModal{z-index:9300}
+.demo-end-card{
+  width:min(600px,calc(100vw - 24px));
+  border-top:4px solid var(--c-warn);
+}
+/* v186: 終了画面の1枚絵は切らずに全部見せる（Tak指示）。
+   v178では画面が低いときに object-fit:cover で上下を切っていたが、
+   「続きは製品版で！」の帯まで切れてしまうのでやめた。
+   幅をカードいっぱいに取り、高さは画像の縦横比のまま伸ばす。 */
+.demo-end-hero{
+  display:block;
+  width:calc(100% + 36px);
+  max-width:calc(100% + 36px);
+  height:auto;
+  margin:-18px -18px 0;
+  object-fit:contain;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  background:#1a1010;
+}
+.demo-end-hero:not([src]){display:none}
+.demo-end-body{
+  display:grid;
+  gap:12px;
+  margin:4px 0 18px;
+}
+.demo-end-lead{
+  font-size:var(--fs-md);
+  font-weight:800;
+  line-height:1.7;
+  color:var(--c-text);
+}
+.demo-end-note{
+  background:#fff7e6;
+  border:1px solid #f5d491;
+  border-radius:var(--r-md);
+  padding:10px 12px;
+  font-weight:700;
+  color:#6b4a00;
+}
+.demo-end-thanks{
+  text-align:center;
+  font-weight:700;
+  color:var(--c-sub);
+  padding-top:4px;
+}
+.demo-end-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.demo-end-actions button{width:100%}
+@media (max-width:520px){
+  .demo-end-actions{grid-template-columns:1fr}
+}
+
+/* ============================================================
+   v176: 自動保存が使えないときの警告と案内
+   ============================================================ */
+.status-bar .sb-chip.danger{
+  background:#fef2f2;border-color:#fca5a5;color:#b91c1c;font-weight:800;
+  cursor:pointer;
+}
+.status-bar .sb-chip.danger:hover{background:#fee2e2}
+.storage-warn{display:grid;gap:12px}
+.storage-warn-lead{
+  background:#fef2f2;border:1px solid #fca5a5;border-radius:var(--r-md);
+  padding:10px 12px;font-weight:800;color:#b91c1c;line-height:1.6;
+}
+.storage-warn-body p{margin:0 0 8px;line-height:1.7}
+.storage-warn-steps{
+  margin:0 0 10px;padding-left:1.3em;display:grid;gap:6px;line-height:1.7;
+}
+.storage-warn-cause{
+  background:#f8fafc;border:1px solid var(--c-line);border-radius:var(--r-md);
+  padding:10px 12px;
+}
+.storage-warn-cause-title{font-weight:800;margin-bottom:6px;color:var(--c-text)}
+.storage-warn-cause ul{margin:0 0 8px;padding-left:1.3em;display:grid;gap:4px;line-height:1.7}
+.storage-warn-cause p{margin:0;color:var(--c-sub);font-size:var(--fs-sm)}
+
+/* ============================================================
+   v179: 試合画面の選手詳細モーダル
+   ============================================================ */
+/* 押せるカードだと分かるようにする */
+.match-lineup-card.is-openable{cursor:pointer;transition:box-shadow .12s,transform .12s,border-color .12s}
+.match-lineup-card.is-openable:hover{
+  border-color:var(--c-primary);
+  box-shadow:0 4px 14px rgba(29,78,216,.16);
+  transform:translateY(-1px);
+}
+.match-lineup-card.is-openable:focus-visible{
+  outline:2px solid var(--c-primary);outline-offset:2px;
+}
+.lineup-tap-hint{
+  font-size:var(--fs-xs);color:var(--c-sub);margin:2px 0 8px;
+}
+
+#matchPlayerModal{z-index:9200}
+.match-player-card{
+  width:min(720px,calc(100vw - 24px));
+  max-height:calc(100vh - 24px);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+/* .modal-head は全体では未定義なので、このモーダルの中だけ整える。
+   他のモーダルの見た目を変えないよう、必ずスコープを付ける。 */
+.match-player-card .modal-head{
+  display:flex;align-items:center;gap:10px;flex:none;
+  padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--c-line);
+}
+.match-player-card .modal-head h2{margin:0;font-size:var(--fs-lg);flex:1}
+.match-player-modal-body{overflow:auto;padding-right:2px}
+
+.mpd{display:grid;gap:14px}
+.mpd-head{display:flex;gap:14px;align-items:flex-start}
+.mpd-face-wrap{flex:none}
+/* 顔グラをしっかり見せるのがこのモーダルの目的なので大きく出す */
+.mpd-face{
+  width:170px;height:170px;object-fit:cover;object-position:center top;
+  border-radius:var(--r-lg);border:1px solid var(--c-line);background:#f1f5fb;display:block;
+}
+.mpd-face-empty{background:repeating-linear-gradient(45deg,#eef2f8,#eef2f8 8px,#e4eaf3 8px,#e4eaf3 16px)}
+.mpd-head-main{flex:1;min-width:0;display:grid;gap:6px;align-content:start}
+.mpd-team{font-size:var(--fs-xs);color:var(--c-sub);font-weight:700}
+.mpd-name{margin:0;font-size:var(--fs-lg);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mpd-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:var(--fs-sm);color:var(--c-sub)}
+.mpd-role{
+  font-weight:800;color:var(--c-text);background:var(--c-primary-soft);
+  border-radius:var(--r-full);padding:2px 10px;
+}
+.mpd-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mpd-specials{margin-top:2px}
+.mpd-nospecial{font-size:var(--fs-xs);color:var(--c-mute)}
+
+.mpd-comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.mpd-comp-group{display:grid;gap:5px}
+.mpd-comp-group-title{font-size:var(--fs-xs);font-weight:800;color:var(--c-text)}
+.mpd-comp-row{display:grid;grid-template-columns:6.2em 1fr auto;gap:8px;align-items:center}
+.mpd-comp-label{font-size:var(--fs-xs);color:var(--c-sub)}
+.mpd-comp-bar{
+  height:7px;border-radius:var(--r-full);background:#eef2f8;overflow:hidden;display:block;
+}
+.mpd-comp-bar>span{display:block;height:100%;border-radius:var(--r-full);background:currentColor}
+.mpd-comp-val{font-size:var(--fs-xs);display:flex;align-items:center;gap:4px;justify-content:flex-end;min-width:3.6em}
+
+.mpd-section h4{
+  margin:0 0 8px;font-size:var(--fs-sm);color:var(--c-sub);
+  border-bottom:1px solid var(--c-line);padding-bottom:5px;
+}
+@media (max-width:560px){
+  .mpd-head{flex-direction:column;align-items:center;text-align:center}
+  .mpd-face{width:150px;height:150px}
+  .mpd-head-main{width:100%}
+  .mpd-meta,.mpd-badges,.mpd-name{justify-content:center}
+  .mpd-comp-grid{grid-template-columns:1fr}
+}
+
+/* ============================================================
+   v180: 選手一覧を、左カードの高さいっぱいまで使う
+   ============================================================ */
+/* これまで .roster-list の高さは max-height:calc(100vh - 230px) で決めていた。
+   ところが左カードの高さは「右の選手詳細カードの中身」で決まる（グリッドの行の高さ）ため、
+   実測で 1236px あるカードの中にリストが 538〜870px しか無く、
+   下に 310〜642px の空白が残っていた。
+   カードを縦の flex にして、リストに残り全部を割り当てる。 */
+@media (min-width: 901px) {
+  .players-layout > .card:first-child{
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    /* 左カードの中身が行の高さを決めないようにする。
+       これが無いと、リストの中身の高さ（実測2274px）で行が伸びてページ全体が長くなる。 */
+    overflow:hidden;
+  }
+  .players-layout > .card:first-child > h2{ flex:none; }
+  .players-layout > .card:first-child > .roster-list{
+    /* flex-basis を 0 にするのが要点。auto だと中身の高さを主張してしまう。 */
+    flex:1 1 0;
+    min-height:0;
+    max-height:none;
+    overflow-y:auto;
+    /* .roster-list は元は display:grid。高さが確定した状態で行が auto のままだと、
+       行が引き伸ばされたり（部員12人で88px→97px）、逆に押し潰されたりした
+       （部員20人で88px→49px。顔グラ56pxが行からはみ出していた）。
+       align-content:start でも直らなかったので、縦の flex に変えて
+       子に flex:0 0 auto を付け、中身どおりの高さを保たせる。 */
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .players-layout > .card:first-child > .roster-list > .roster-item{
+    flex:0 0 auto;
+  }
+}
+
+/* v181: 進行バーで条件未達の枠（？？？）は控えめに見せる */
+.status-bar .sb-tp.sb-tp-secret{letter-spacing:.02em;color:var(--c-mute)}
+
+/* v181: 監督行動の練習メニューは1行4枚に固定する（Tak指示）。
+   .training-pick-grid は留学先の選択でも使っているので、このグリッドだけに効かせる。 */
+#individualModalTrainingGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:900px){ #individualModalTrainingGrid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px){ #individualModalTrainingGrid{grid-template-columns:1fr} }
+
+/* ============================================================
+   v181: 試合画面のベンチ表示（Tak指示 ④）
+   ベンチの選手も押せば詳細モーダルが開く。
+   ============================================================ */
+.match-lineups h4.match-bench-head {
+  color: #475569;
+  font-size: 0.95em;
+}
+.match-lineup-card.lineup-bench-card {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.match-bench-empty {
+  font-size: 0.9em;
+  padding: 4px 2px;
+}
+
+/* ============================================================
+   v182: 画面上部を1本の帯にまとめる（Tak指示）
+   ------------------------------------------------------------
+   従来は .topbar（ロゴ＋年月＋学校の格／108px）、#statusBar（年月＋大会
+   タイムライン＋チップ／60px）、.tabs（タブ＋次週に進む／42px）の3段で、
+   main が始まるまでに 258px 使っていた。
+   残すのは「ロゴ（小）／年と月と週／学校の格／大会タイムライン（極小）／
+   タブ／次週に進む」の6つ。練習Lv・部員数・今月の行動はチーム画面へ移し、
+   未決定の目印は「監督」タブの●にした。
+   ============================================================ */
+.topbar{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  gap:6px 8px;
+  padding:7px 12px;
+  border-radius:16px;
+  margin-bottom:10px;
+}
+/* v183b: ロゴは帯からはみ出すくらい大きく（Tak指示）。
+   実寸は512x288（16:9・透明余白なし）。帯の高さは変えたくないので、
+   上下に負のマージンを入れて帯を押し広げずにはみ出させる。 */
+.topbar-logo{
+  display:block;
+  height:64px;
+  width:auto;
+  max-width:none;
+  object-fit:contain;
+  flex:0 0 auto;
+  margin:-13px 2px -13px 0;
+  position:relative;
+  z-index:2;
+}
+.topbar-season{
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  white-space:nowrap;
+  font-weight:800;
+  color:var(--c-text,#17305a);
+  flex:0 0 auto;
+}
+/* v184: 主役は月。年目と週は添えるだけにする（Tak指示） */
+.topbar-year{font-size:.78rem;color:var(--c-sub,#5b6b86);font-weight:700}
+.topbar-year b{font-size:.95rem;line-height:1;margin-right:1px}
+.topbar-month{
+  font-size:1.35rem;
+  line-height:1;
+  font-weight:900;
+  color:var(--c-accent,#3a7dff);
+  letter-spacing:.01em;
+  margin-left:3px;
+}
+.topbar-week{font-size:.8rem;color:var(--c-sub,#5b6b86);font-weight:700;margin-left:1px}
+.topbar-class{
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-size:.76rem;
+  font-weight:800;
+  color:#1d4ed8;
+  background:#eff6ff;
+  border:1px solid #bfdbfe;
+  border-radius:999px;
+  padding:3px 9px;
+}
+
+/* 大会タイムライン：月名は title 属性に逃がし、帯には大会名だけを極小で出す */
+/* flex:0 0 auto にしてあるのは、幅が足りないときに文字を潰さず
+   タイムラインごと次の行へ落とすため。潰すと「IH…」になって読めない。 */
+.topbar-timeline{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  flex:0 0 auto;
+}
+.topbar-timeline .sb-tp{
+  flex:0 0 auto;
+  text-align:center;
+  font-size:10px;
+  line-height:1.2;
+  padding:3px 6px;
+  border-radius:6px;
+  background:#f1f5fb;
+  color:var(--c-mute,#7c8aa3);
+  border:1px solid var(--c-line,#dbe3ef);
+  white-space:nowrap;
+}
+.topbar-timeline .sb-tp.done{background:#eef7ee;color:var(--c-ok,#2f8f4e);border-color:#cfe8cf}
+.topbar-timeline .sb-tp.now{background:var(--c-accent,#3a7dff);color:#fff;border-color:var(--c-accent,#3a7dff);font-weight:700}
+.topbar-timeline .sb-tp.sb-tp-secret{letter-spacing:.02em;color:var(--c-mute,#7c8aa3)}
+
+/* タブ：帯に収まる高さにする */
+.topbar-tabs{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  flex:0 0 auto;
+  flex-wrap:wrap;
+}
+.topbar-tabs .tab-btn{
+  padding:6px 10px;
+  font-size:.82rem;
+  border-radius:999px;
+  position:relative;
+}
+/* 監督行動が未決定のときの目印（旧「今月の行動：未決定」チップの代わり） */
+.tab-btn.tab-todo::after{
+  content:'';
+  position:absolute;
+  top:4px;
+  right:6px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#f97316;
+  box-shadow:0 0 0 2px #fff;
+}
+.tab-btn.tab-todo.active::after{box-shadow:0 0 0 2px var(--primary,#3a7dff)}
+
+.topbar-chips{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.topbar-chips:empty{display:none}
+.topbar-chips .sb-chip{
+  font-size:var(--fs-xs,.72rem);
+  background:#f1f5fb;border:1px solid var(--c-line,#dbe3ef);
+  border-radius:999px;padding:3px 9px;color:var(--c-sub,#5b6b86);
+}
+.topbar-chips .sb-chip.danger{
+  background:#fef2f2;border-color:#fecaca;color:#b91c1c;font-weight:800;cursor:pointer;
+}
+.topbar-chips .sb-chip.danger:hover{background:#fee2e2}
+
+.topbar .global-advance-btn{
+  margin-left:auto;
+  white-space:nowrap;
+  padding:8px 16px;
+  font-size:.9rem;
+  flex:0 0 auto;
+}
+
+/* チーム画面へ移した「今月の行動／学校の格／練習Lv／部員数」 */
+.team-status-chips{
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;
+}
+.team-status-chips .sb-chip{
+  font-size:var(--fs-xs,.72rem);background:#f1f5fb;border:1px solid var(--c-line,#dbe3ef);
+  border-radius:999px;padding:4px 10px;color:var(--c-sub,#5b6b86);
+}
+.team-status-chips .sb-chip.ok{background:#eef7ee;border-color:#cfe8cf;color:var(--c-ok,#2f8f4e);font-weight:700}
+.team-status-chips .sb-chip.todo{background:#fff7ed;border-color:#fed7aa;color:#c2410c;font-weight:700}
+
+/* 1行に入らなくなったら、タイムラインだけを下の行へ回す */
+@media (max-width:1240px){
+  .topbar-timeline{flex:1 1 100%;order:5;justify-content:flex-start}
+}
+@media (max-width:640px){
+  .topbar{padding:6px 10px;gap:6px 8px}
+  .topbar-logo{height:46px;margin:-9px 2px -9px 0}
+  .topbar-tabs .tab-btn{padding:5px 10px;font-size:.78rem}
+  .topbar .global-advance-btn{padding:7px 12px;font-size:.84rem}
+  /* v192: flex:0 0 auto のままだと縮めず、360px幅でタブ帯が1px弱はみ出す。
+     折り返しは既に有効なので、縮小を許可してはみ出しを止める（Tak指示） */
+  .topbar-tabs{flex:0 1 auto;min-width:0}
+}
+
+/* ============================================================
+   v183: スカウトの噂カードを押せるようにする（Tak指示）
+   ============================================================ */
+.scout-rumor-card.is-openable{
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.scout-rumor-card.is-openable:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(29,78,216,.14);
+}
+.scout-rumor-card.is-openable:focus-visible{
+  outline:2px solid #3a7dff;
+  outline-offset:2px;
+}
+.scout-rumor-card.scout-rumor-card-active{
+  border-color:#3a7dff;
+  box-shadow:0 0 0 2px rgba(58,125,255,.22);
+}
+
+/* ============================================================
+   v183b: 顔グラを背景となじませる（Tak指示・実物で確認して作り直し）
+   ------------------------------------------------------------
+   最初の版は四隅を削る放射状マスクだけだったが、実物の顔グラは
+   PNG自体に円形の背景色が焼き込まれているため、見た目がほとんど
+   変わらなかった（実機で確認）。円の内側から溶かす必要がある。
+
+   作りは同じ画像の2枚重ね。
+     ・後ろ … 同じ画像を拡大してぼかしたもの。にじみの色が
+              キャラごとの背景色に自動で追従する（固定色だと
+              黄・薄紫・ミントなど色違いに合わない）
+     ・前　 … 本体。外周をマスクでフェードさせて境界を消す
+   選手画面の詳細と、試合画面の選手モーダルの両方に当てる。
+   ============================================================ */
+.detail-face-wrap,
+.face-blend{
+  position:relative;
+  display:block;
+  width:150px;
+  height:150px;
+  flex-shrink:0;
+  isolation:isolate;
+}
+.detail-face-wrap .face-blend-bg,
+.detail-face-wrap .face-blend-fg,
+.face-blend .face-blend-bg,
+.face-blend .face-blend-fg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:0 !important;
+  background:transparent !important;
+  border:0 !important;
+}
+/* 後ろ：にじみ */
+.face-blend-bg{
+  z-index:0;
+  transform:scale(1.12);
+  filter:blur(13px) saturate(1.05);
+  opacity:.85;
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(58% 60% at 50% 45%,#000 40%,rgba(0,0,0,.55) 70%,transparent 100%);
+          mask-image:radial-gradient(58% 60% at 50% 45%,#000 40%,rgba(0,0,0,.55) 70%,transparent 100%);
+  -webkit-mask-size:100% 100%; mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+}
+/* 前：本体。#000 58% までは素のままなので顔は潰れない */
+.face-blend-fg{
+  z-index:1;
+  -webkit-mask-image:radial-gradient(52% 54% at 50% 45%,#000 58%,rgba(0,0,0,.88) 73%,rgba(0,0,0,.38) 88%,transparent 100%);
+          mask-image:radial-gradient(52% 54% at 50% 45%,#000 58%,rgba(0,0,0,.88) 73%,rgba(0,0,0,.38) 88%,transparent 100%);
+  -webkit-mask-size:100% 100%; mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+}
+/* 試合画面のモーダルは170px。枠線と背景色は要らない */
+.mpd-face-wrap .face-blend.mpd-face{
+  width:170px;height:170px;
+  border:0 !important;background:transparent !important;border-radius:0 !important;
+}
+/* v179以来この枠は上寄せで切っていたので、その見え方を保つ */
+.mpd-face-wrap .face-blend .face-blend-bg,
+.mpd-face-wrap .face-blend .face-blend-fg{ object-position:center top; }
+/* mask を解釈しないブラウザでは、にじみを消して従来の角丸に戻す */
+@supports not ((-webkit-mask-image:radial-gradient(#000,transparent)) or (mask-image:radial-gradient(#000,transparent))){
+  .face-blend-bg{ display:none; }
+  .face-blend-fg{ border-radius:18px !important; background:#eef4ff !important; }
+}
+@media (max-width: 560px){
+  .detail-face-wrap{ width:110px; height:110px; }
+  .mpd-face-wrap .face-blend.mpd-face{ width:150px; height:150px; }
+}
+
+/* v195: 選手の性格チップ（Tak指示）。内部の成長倍率は出さず、名前と傾向だけを見せる。 */
+.personality-row{margin-top:4px;}
+/* v199: 半透明の白背景だと文字が薄くて読めなかったので、調子バッジと同じ
+   「薄い背景＋濃い文字」に変えた（Tak指摘）。 */
+.personality-chip{
+  display:inline-flex;align-items:center;border-radius:999px;cursor:pointer;
+  padding:4px 11px;font-size:.8rem;font-weight:800;line-height:1.5;
+  background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;
+}
+.personality-chip:hover{background:#ede9fe;}
+
+/* v196: ゲーム開始時「最初の約束」の会話（Tak指示）。キャラメイク画面に見えないよう、
+   左に顔、右に会話という1本の流れで見せる。 */
+.promise-scene{display:flex;gap:16px;align-items:flex-start;}
+.promise-face{flex:0 0 132px;}
+.promise-face img{width:132px;height:132px;object-fit:cover;border-radius:18px;display:block;box-shadow:var(--shadow);}
+.promise-face-silhouette{
+  width:132px;height:132px;border-radius:18px;
+  background:linear-gradient(180deg,#dbeafe,#bfdbfe);
+  border:1px dashed #93c5fd;
+}
+.promise-body{flex:1 1 auto;min-width:0;}
+.promise-talk,.promise-narration{
+  background:linear-gradient(180deg,#f8fbff,#eef6ff);
+  border:1px solid #dbeafe;border-radius:18px;padding:14px 16px;color:#172554;line-height:1.75;
+}
+.promise-talk .promise-line{margin:0 0 2px;font-weight:900;}
+.promise-narration p{margin:0 0 2px;font-weight:700;color:#334155;}
+.promise-step-head{font-weight:900;color:#1d4ed8;margin-bottom:8px;}
+.promise-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;}
+.promise-personality-grid{grid-template-columns:1fr;}
+.promise-strength-grid{grid-template-columns:repeat(auto-fit,minmax(118px,1fr));}
+.promise-choice{
+  border:1px solid #bfdbfe;background:#fff;border-radius:14px;padding:10px 12px;
+  cursor:pointer;font-weight:900;color:#1d4ed8;text-align:left;line-height:1.5;
+}
+.promise-choice:hover{background:#eff6ff;}
+.promise-choice.is-selected{background:#1d4ed8;color:#fff;border-color:#1d4ed8;}
+.promise-choice-line{text-align:left;}
+.promise-face-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:8px;max-height:320px;overflow-y:auto;}
+.promise-face-pick{border:1px solid #bfdbfe;background:#fff;border-radius:14px;padding:4px;cursor:pointer;}
+.promise-face-pick:hover{border-color:#1d4ed8;background:#eff6ff;}
+.promise-face-pick img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;display:block;}
+.promise-vow{
+  border:2px solid #f2c75c;border-radius:18px;padding:14px 16px;
+  background:linear-gradient(180deg,#fffdf5,#fff6e0);
+}
+.promise-vow-head{font-weight:900;color:#a16207;letter-spacing:.08em;margin-bottom:6px;}
+.promise-vow-body{font-weight:900;color:#78350f;line-height:1.7;}
+@media (max-width:560px){
+  .promise-scene{flex-direction:column;align-items:center;}
+  .promise-face{flex:0 0 auto;}
+  .promise-body{width:100%;}
+}
+
+
+/* v207/v209: OG戦に勝ったあとの「ありがとうございました」は、絵だけを大きく出し、
+   右下に「閉じる」だけを置く（Tak指示）。タイトル・種類バッジ・本文はすべて隠す。
+   v209: 画面いっぱいすぎたので少し内側に寄せ、余白は白に。
+         画面が白くゆっくり変わってから絵がにじみ出るフェード演出を入れた。 */
+#growthModal.popup-image-only{ padding:0; }
+#growthModal.popup-image-only .modal-backdrop{
+  background:#ffffff;
+  opacity:1;
+  animation:popupImageWhiteIn .75s ease-out both;
+}
+@keyframes popupImageWhiteIn{
+  from{ background:rgba(255,255,255,0); }
+  to{ background:rgba(255,255,255,1); }
+}
+#growthModal.popup-image-only .modal-card,
+#growthModal.popup-image-only .important-popup-card{
+  width:min(92vw, 1600px);
+  max-width:92vw;
+  height:88vh;
+  max-height:88vh;
+  margin:0;
+  padding:0;
+  border-radius:16px;
+  overflow:hidden;
+  background:#ffffff;
+  box-shadow:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#growthModal.popup-image-only .modal-title-row,
+#growthModal.popup-image-only .popup-kind,
+#growthModal.popup-image-only .popup-scroll-body{ display:none !important; }
+#growthModal.popup-image-only #growthModalContent{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ffffff;
+}
+#growthModal.popup-image-only .popup-illustration{
+  width:100%;
+  height:100%;
+  max-width:100%;
+  margin:0;
+  border:none;
+  border-radius:0;
+  box-shadow:none;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#growthModal.popup-image-only .popup-illustration img{
+  width:100%;
+  height:100%;
+  max-width:100%;
+  max-height:88vh;
+  object-fit:contain;
+  border-radius:0;
+  background:#ffffff;
+  animation:popupImageFadeIn 1.6s ease-out .65s both;
+}
+@keyframes popupImageFadeIn{
+  from{ opacity:0; transform:scale(.985); }
+  to{ opacity:1; transform:none; }
+}
+/* v210: 「閉じる」は白い余白になじむよう、小さく control-light な見た目で画面の右下に置く（Tak指示）。
+   カード内ではなく画面の隅を基準にしたいので position:fixed。 */
+#growthModal.popup-image-only .modal-bottom-actions{
+  position:fixed;
+  right:16px;
+  bottom:10px;
+  top:auto;
+  left:auto;
+  width:auto;
+  margin:0;
+  padding:0;
+  background:none;
+  border:none;
+  box-shadow:none;
+  justify-content:flex-end;
+  z-index:5;
+  animation:popupImageFadeIn .8s ease-out 1.9s both;
+}
+#growthModal.popup-image-only .modal-bottom-actions .primary{
+  min-width:0;
+  width:auto;
+  padding:3px 13px;
+  font-size:.74rem;
+  font-weight:700;
+  line-height:1.6;
+  border-radius:999px;
+  background:#ffffff;
+  color:#9aa5b4;
+  border:1px solid #e8ecf2;
+  box-shadow:none;
+}
+#growthModal.popup-image-only .modal-bottom-actions .primary:hover{
+  background:#f6f8fb;
+  color:#5b6777;
+  border-color:#dbe2ec;
+}
+/* 動きを減らす設定の環境ではフェードを出さない */
+@media (prefers-reduced-motion: reduce){
+  #growthModal.popup-image-only .modal-backdrop,
+  #growthModal.popup-image-only .popup-illustration img,
+  #growthModal.popup-image-only .modal-bottom-actions{ animation:none; }
+}
+
+/* ============================================================
+   v211: 「最初の約束」のイベントで進めなくなる不具合の修正（Tak報告）
+   ------------------------------------------------------------
+   イベントの挿絵は横長（1280x720）の一枚絵を前提に、v125で高さの上限を外して
+   カードの横幅いっぱいに出している。ところが「最初の約束」の2年生・3年生・卒業の
+   3イベントだけは、一枚絵ではなくその子の顔グラ（512x512の正方形）を挿絵に使うため、
+   絵の高さが横長の絵のおよそ1.8倍になり、カードが約190px縦に伸びてしまう。
+   その結果、画面の高さが720px前後の環境では「次へ」ボタンがカードの外へはみ出し、
+   クリックしても反応せず、最後の頁に進めないため「閉じる」も出てこない＝進行不能になる。
+   顔グラを使うときだけ、縦横ともに上限を掛けて元の高さに収める。
+   ============================================================ */
+/* 保険：今後どんな絵を入れても、挿絵だけでカードが破綻しないように高さの天井を置く。
+   横長の一枚絵（横449px時の高さ252px）には掛からない値にしてあるので見た目は変わらない。 */
+#growthModal .popup-illustration img{max-height:min(40vh,420px);}
+#growthModal .popup-illustration-face{
+  max-width:min(44%,260px);
+  margin-left:auto;
+  margin-right:auto;
+}
+#growthModal .popup-illustration-face img{
+  width:100%;
+  height:auto;
+  max-height:min(30vh,260px);
+  object-fit:contain;
+}
+
+/* ============================================================
+   v213: 学校名を「名前」＋「種別」に分けて決める（Tak指示）
+   導入画面の種別チップと、完成形のプレビュー。
+   ============================================================ */
+.school-kind-grid{
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;
+}
+.school-kind-chip{
+  appearance:none; cursor:pointer;
+  padding:6px 12px; font-size:.86rem; font-weight:600; line-height:1.4;
+  border-radius:999px; border:1px solid #d8e2f2; background:#fff; color:#4a5568;
+  transition:background .12s ease, border-color .12s ease, color .12s ease;
+}
+.school-kind-chip:hover{ background:#f2f6fd; border-color:#b9cdf0; }
+.school-kind-chip.selected{
+  background:#2f6fe4; border-color:#2f6fe4; color:#fff;
+}
+.school-name-preview{
+  font-size:.92rem; color:#5a6678;
+}
+.school-name-preview strong{
+  font-size:1.12rem; color:#1f2a3a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .school-kind-chip{ background:#1e2530; border-color:#33405a; color:#c6d2e4; }
+  :root:not([data-theme="light"]) .school-kind-chip:hover{ background:#26303f; }
+  :root:not([data-theme="light"]) .school-kind-chip.selected{ background:#3d7ff0; border-color:#3d7ff0; color:#fff; }
+  :root:not([data-theme="light"]) .school-name-preview{ color:#9fb0c8; }
+  :root:not([data-theme="light"]) .school-name-preview strong{ color:#eef3fb; }
+}
